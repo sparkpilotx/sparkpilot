@@ -70,7 +70,7 @@ Component authoring rules (renderer)
 
 - Factor repeated UI into reusable components once a pattern appears ≥2–3 times.
 - Prefer composition: small presentational components composed by thin containers.
-- Co-locate feature-specific components under the feature (e.g., `windows/hello-trpc/features/*`).
+- Co-locate feature-specific components under the owning window/feature directory.
 - Keep cross-feature primitives under `src/renderer/src/components/` and tie styles to globals.css tokens.
 
 ## Simplicity & composition
@@ -82,9 +82,9 @@ Component authoring rules (renderer)
 
 ## Component layering
 
-- Primitives (token-bound): Button, Input, SectionHeader, Card – CVA+Tailwind, globals.css tokens only.
-- Compound (accessibility-heavy): Dialog, Popover, Tooltip, Dropdown – prefer shadcn/ui (Radix-backed).
-- Feature modules: assemble primitives/compound components; own business logic lives here.
+- Primitives (token-bound): simple controls adhering to globals.css tokens, implemented with CVA + Tailwind; no feature-specific logic or references.
+- Compound (accessibility-heavy): complex widgets should use accessible primitives or library-backed components; wrap only to align tokens or integrate app-region rules.
+- Feature modules: assemble primitives/compound components; business logic and data wiring live here.
 - Window chrome: owns `.app-region-*`, layout, and menu affordances; no business logic.
 
 ## Variants & CVA design
