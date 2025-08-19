@@ -66,6 +66,49 @@ Component authoring rules (renderer)
 - Use `.app-region-drag` only on non-interactive chrome; wrap interactive zones with `.app-region-no-drag`.
 - Favor native-feeling scroll, spacing, and motion; avoid webby patterns that fight window drag.
 
+## Clarity & reuse
+
+- Factor repeated UI into reusable components once a pattern appears ≥2–3 times.
+- Prefer composition: small presentational components composed by thin containers.
+- Co-locate feature-specific components under the feature (e.g., `windows/hello-trpc/features/*`).
+- Keep cross-feature primitives under `src/renderer/src/components/` and tie styles to globals.css tokens.
+
+## Simplicity & composition
+
+- Keep components small and single-responsibility; avoid prop explosions and deep conditionals.
+- Extract logic to hooks (`src/renderer/src/hooks/`) and helpers (`src/renderer/src/lib/`).
+- Avoid inline styles; rely on Tailwind utilities and CVA variants bound to globals.css tokens.
+- Don’t overuse memoization; add `memo`/`useMemo` only after profiling.
+
+## Component layering
+
+- Primitives (token-bound): Button, Input, SectionHeader, Card – CVA+Tailwind, globals.css tokens only.
+- Compound (accessibility-heavy): Dialog, Popover, Tooltip, Dropdown – prefer shadcn/ui (Radix-backed).
+- Feature modules: assemble primitives/compound components; own business logic lives here.
+- Window chrome: owns `.app-region-*`, layout, and menu affordances; no business logic.
+
+## Variants & CVA design
+
+- Standardize CVA props: `variant` (primary | secondary | outline | ghost), `size` (sm | md | lg).
+- Base classes must be token-driven (`bg-background`, `text-foreground`, `ring`, `border`).
+- Use `cn()` to merge classes; never duplicate token values with hardcoded colors.
+- Keep variant matrices minimal—remove unused variants/sizes.
+
+## Async UX & errors
+
+- Loading: use skeletons or `animate-pulse`; disable actions via `disabled` states.
+- Error: show concise, token-aligned error styles (`text-destructive`, `bg-destructive/10`).
+- Boundaries: isolate risky areas with error boundaries; fail soft where possible.
+
+## Review checklist (must-pass)
+
+- Styling only uses globals.css tokens (no hardcoded colors/radii/shadows).
+- Spacing follows 4px grid; typography scale ≤5 sizes; captions use `text-xs`.
+- CVA used for multi-state visuals with `variant`/`size` conventions.
+- No `.app-region-drag` on interactive controls; `.app-region-no-drag` applied correctly.
+- Repeated UI factored; feature code lives under its feature folder.
+- Accessible semantics present; complex widgets use Radix/shadcn when needed.
+
 ## Forbidden patterns
 
 - `React.FC`
