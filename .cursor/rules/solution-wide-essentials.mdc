@@ -45,6 +45,16 @@ alwaysApply: true
 - Query engine path is resolved per OS at runtime; respects `@electron-toolkit/utils` platform helpers.
 - On startup, `ensureDatabaseConnection()` runs in `src/main/index.ts`; prod aborts on failure.
 
+# tRPC & IPC Strategy
+- Prefer tRPC for renderer↔main communication of app/domain data:
+  - Server runs in main (`src/main/trpc/*`) with `createHTTPHandler` (standalone adapter).
+  - Transport: HTTP batching for queries/mutations; SSE (`httpSubscriptionLink`) for subscriptions.
+  - Base URL is single-sourced via `VITE_TRPC_HTTP_URL`; keep CSP `connect-src` aligned.
+- Use Electron IPC only for OS/windowing concerns that are not domain data (e.g., window controls, tray actions). Expose minimal, Zod-validated preload APIs.
+- Renderer must not import Node/Electron APIs directly; all domain calls go through tRPC client (`src/renderer/src/lib/trpc.ts`).
+- Keep tRPC context minimal and typed (Prisma client and future per-request metadata). No heavy objects.
+- Subscriptions: prefer SSE for simplicity; only switch to WebSockets if strictly required.
+
 # Release & Ops
 - Package with **electron-builder** → DMG/ZIP for macOS.
 - **Code signing + notarization** required for frictionless installs.
