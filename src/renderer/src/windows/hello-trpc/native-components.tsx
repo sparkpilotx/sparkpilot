@@ -4,13 +4,13 @@ import { cn } from '@/lib/cn'
 
 // Native macOS card component with proper spacing and shadows
 const cardVariants = cva(
-  'rounded-xl border border-border/50 bg-card/80 backdrop-blur-xl supports-[backdrop-filter]:bg-card/60 transition-all duration-200',
+  'rounded-xl border border-border bg-card/80 backdrop-blur-xl supports-[backdrop-filter]:bg-card/60 transition-all duration-200',
   {
     variants: {
       variant: {
-        default: 'shadow-sm hover:shadow-md hover:border-border/80',
-        feature: 'shadow-lg border-border/30 hover:shadow-xl hover:border-border/60',
-        tour: 'shadow-md border-primary/20 bg-primary/5 hover:shadow-lg',
+        default: 'shadow-sm hover:shadow-md',
+        feature: 'shadow-lg hover:shadow-xl',
+        tour: 'shadow-md bg-primary/5 hover:shadow-lg',
       },
       size: {
         sm: 'p-4',
@@ -76,9 +76,9 @@ const statusVariants = cva('inline-flex items-center gap-1.5 text-xs font-medium
   variants: {
     status: {
       idle: 'text-muted-foreground',
-      loading: 'text-blue-600 dark:text-blue-400',
-      success: 'text-green-600 dark:text-green-400',
-      error: 'text-red-600 dark:text-red-400',
+      loading: 'text-ring',
+      success: 'text-primary',
+      error: 'text-destructive',
     },
   },
 })
@@ -100,9 +100,9 @@ export const StatusIndicator = ({
       <div
         className={cn('w-2 h-2 rounded-full', {
           'bg-muted-foreground/40': status === 'idle',
-          'bg-blue-500 animate-pulse': status === 'loading',
-          'bg-green-500': status === 'success',
-          'bg-red-500': status === 'error',
+          'bg-ring animate-pulse': status === 'loading',
+          'bg-primary': status === 'success',
+          'bg-destructive': status === 'error',
         })}
       />
       {children}
@@ -127,14 +127,14 @@ export const NativeInput = React.forwardRef<HTMLInputElement, NativeInputProps>(
           className={cn(
             'w-full rounded-lg border border-input bg-background/50 px-3 py-2 text-sm',
             'placeholder:text-muted-foreground/60',
-            'focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20',
+            'focus:border-primary focus:outline-none focus:ring-1 focus:ring-ring/20',
             'transition-colors duration-200',
-            error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
+            error && 'border-destructive focus:border-destructive focus:ring-destructive/20',
             className,
           )}
           {...props}
         />
-        {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
+        {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
     )
   },
