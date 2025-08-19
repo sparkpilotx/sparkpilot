@@ -6,9 +6,9 @@ export const windowModule: WindowModule = {
     title: 'SparkPilot • Hello World',
     menuLabel: 'Hello World',
     singleInstance: true,
-    width: 640,
-    height: 480,
-    minWidth: 480,
-    minHeight: 360,
+    width: 1280,
+    height: 720,
+    minWidth: 1280,
+    minHeight: 720,
   },
 }

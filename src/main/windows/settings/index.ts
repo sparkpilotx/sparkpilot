@@ -6,9 +6,9 @@ export const windowModule: WindowModule = {
     title: 'SparkPilot • Settings',
     menuLabel: 'Settings',
     singleInstance: true,
-    width: 760,
-    height: 600,
-    minWidth: 600,
-    minHeight: 440,
+    width: 1280,
+    height: 720,
+    minWidth: 1280,
+    minHeight: 720,
   },
 }
