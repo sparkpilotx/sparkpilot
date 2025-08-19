@@ -43,6 +43,29 @@ Component authoring rules (renderer)
   - Do not hardcode colors in components; prefer semantic tokens and Tailwind utilities bound to globals.css.
   - If a token is missing, add it to `globals.css` rather than inlining styles.
 
+### Typography & spacing
+- Limit the typography scale to ~5 sizes/weights for hierarchy; use `text-xs` for captions/meta.
+- Use spacing in multiples of 4 for padding/margins to maintain rhythm.
+- Prefer semantic class names tied to tokens over arbitrary values.
+
+### CVA conventions
+- Variant names: `variant` (intent: `primary`, `secondary`, `outline`, `ghost`), `size` (`sm`, `md`, `lg`).
+- Keep CVA base classes token-driven (e.g., `bg-background`, `text-foreground`, `ring`).
+- Merge with `cn()`; do not concatenate ad‑hoc strings that duplicate token values.
+
+### shadcn/ui integration policy
+- Use shadcn/ui (Radix-backed) for complex interactive widgets (Dialog, Popover, Tooltip, DropdownMenu, Menubar, Tabs, ToggleGroup, ScrollArea, Select, Toast).
+- Simple controls (Button, Input, SectionHeader, Card) may use thin project wrappers tied to globals.css tokens and CVA.
+
+### Accessibility & interactions
+- Semantic HTML first; add ARIA where needed. Preserve focus visibility using `ring` tokens.
+- Provide loading and skeleton states (`animate-pulse`) for async UI.
+- Keep hover/active states subtle and token-aligned; avoid excessive shadows.
+
+### Electron/macOS specifics
+- Use `.app-region-drag` only on non-interactive chrome; wrap interactive zones with `.app-region-no-drag`.
+- Favor native-feeling scroll, spacing, and motion; avoid webby patterns that fight window drag.
+
 ## Forbidden patterns
 
 - `React.FC`
