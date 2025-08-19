@@ -10,6 +10,10 @@
     "dev": "electron-vite dev",
     "prebuild": "node ./scripts/gen-tray-assets.mjs",
     "build": "electron-vite build",
+    "db:generate": "dotenv -e .env.local -- prisma generate --schema=./prisma/schema.prisma",
+    "db:migrate": "dotenv -e .env.local -- prisma migrate dev --name init --schema=./prisma/schema.prisma",
+    "db:studio": "dotenv -e .env.local -- prisma studio --schema=./prisma/schema.prisma",
+    "db:reset": "dotenv -e .env.local -- prisma migrate reset --force --schema=./prisma/schema.prisma",
     "build:mac": "npm run build && ELECTRON_MIRROR=https://github.com/electron/electron/releases/download/ HTTP_PROXY=http://127.0.0.1:2022 HTTPS_PROXY=http://127.0.0.1:2022 CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --publish never",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
@@ -17,7 +21,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps && dotenv -e .env.local -- prisma generate --schema=./prisma/schema.prisma || true"
   },
   "keywords": [],
   "author": "simonxing",
@@ -30,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
     "@vitejs/plugin-react": "^5.0.0",
+    "dotenv-cli": "^10.0.0",
     "electron": "^37.3.0",
     "electron-builder": "^26.0.12",
     "electron-vite": "^4.0.0",

@@ -21,6 +21,10 @@ alwaysApply: true
 - `npm run lint:fix` → ESLint (`--fix`)
 - `npm run format` → Prettier write
 - `npm run format:check` → Prettier check
+- `npm run db:generate` → Prisma generate (loads `.env.local` via dotenv-cli)
+- `npm run db:migrate` → Prisma migrate dev (loads `.env.local`)
+- `npm run db:reset` → Prisma reset (loads `.env.local`)
+- `npm run db:studio` → Prisma Studio (loads `.env.local`)
 
 # UI & Styling
 - **TailwindCSS v4** + **shadcn/ui** primitives.
@@ -33,6 +37,13 @@ alwaysApply: true
 - Enforce CSP: `default-src 'self'` (expand only with explicit justification).
 - Preload: expose **minimal** APIs only; validate all inputs with **Zod**.
 - Audit prod dependencies; keep Electron/React pinned to avoid ABI drift.
+
+# Data & Prisma
+- Prisma client runs only in main: see `src/main/prisma.ts`. Do not import in renderer.
+- Datasource URL: `MAIN_VITE_POSTGRES_URL` in `.env.local`.
+- Engines bundled for production via `electron-builder.yml` (`asarUnpack` + `extraResources`).
+- Query engine path is resolved per OS at runtime; respects `@electron-toolkit/utils` platform helpers.
+- On startup, `ensureDatabaseConnection()` runs in `src/main/index.ts`; prod aborts on failure.
 
 # Release & Ops
 - Package with **electron-builder** → DMG/ZIP for macOS.

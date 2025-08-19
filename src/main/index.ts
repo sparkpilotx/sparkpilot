@@ -3,6 +3,7 @@ import { shell } from 'electron/common'
 import { platform } from '@electron-toolkit/utils'
 import { createAppTray, destroyAppTray } from './tray'
 import { buildWindowsTrayMenu } from './window-manager'
+import { ensureDatabaseConnection } from './prisma'
 
 /**
  * Main process entry point for SparkPilot
@@ -62,10 +63,22 @@ if (hasSingleInstanceLock) {
  * macOS: Re-creates window when dock icon is clicked, following platform
  * conventions for single-window applications.
  */
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // macOS: hide Dock to run as tray-only app
   if (platform.isMacOS) {
     app.dock?.hide()
+  }
+
+  // Verify database connectivity early; non-fatal in development
+  try {
+    await ensureDatabaseConnection()
+  } catch (error) {
+    console.error('Database connectivity check failed:', error)
+    if (process.env.NODE_ENV === 'production') {
+      // In production, abort startup if DB is required
+      app.quit()
+      return
+    }
   }
 
   // Create system tray with dynamic windows menu
