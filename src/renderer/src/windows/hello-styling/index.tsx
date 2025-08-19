@@ -1,5 +1,5 @@
 import React from 'react'
-import { WindowChrome } from '@/components/ui/window-chrome'
+import { WindowChrome } from '@/components/window/window-chrome'
 
 type HelloStylingProps = {}
 const HelloStyling = ({}: HelloStylingProps): React.JSX.Element => {

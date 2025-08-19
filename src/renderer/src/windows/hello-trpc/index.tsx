@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { SectionHeader } from './shared-components'
-import { WindowChrome } from '@/components/ui/window-chrome'
+import { WindowChrome } from '@/components/window/window-chrome'
 import { TourProvider, TourNavigation, useTour } from './tour-system'
 import {
   DatabaseHealthFeature,
