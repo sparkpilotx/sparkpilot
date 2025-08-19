@@ -3,7 +3,7 @@ alwaysApply: true
 ---
 
 # Objectives
-- Build a macOS-native, **tray-triggered**, **multi-window** Electron app with a smooth, native-feeling UX.
+- Build a **tray-triggered**, **multi-window** Electron app with a consistent, responsive UX.
 - Keep the stack stable with pinned versions and strict security defaults.
 - Ship notarized releases with crash reporting and optional auto-updates.
 

@@ -4,6 +4,8 @@ alwaysApply: false
 ---
 Component authoring rules (renderer)
 
+
+
 ## Component typing
 
 - Prefer explicit props and explicit return types over React.FC.
@@ -64,7 +66,7 @@ Component authoring rules (renderer)
 
 ### Electron/macOS specifics
 - Use `.app-region-drag` only on non-interactive chrome; wrap interactive zones with `.app-region-no-drag`.
-- Favor native-feeling scroll, spacing, and motion; avoid webby patterns that fight window drag.
+- Keep interactions consistent and responsive; avoid patterns that fight window drag.
 
 ## Clarity & reuse
 
