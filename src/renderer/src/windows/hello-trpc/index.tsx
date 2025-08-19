@@ -51,7 +51,7 @@ class SimpleErrorBoundary extends React.Component<
             badge="Error"
           />
           <div className="space-y-4">
-            <div className="text-sm text-red-600 dark:text-red-400 font-mono bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+            <div className="text-sm text-destructive font-mono bg-destructive/10 p-3 rounded-lg">
               {this.state.error.message}
             </div>
             <NativeButton variant="outline" onClick={reset} className="w-full">

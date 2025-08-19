@@ -104,13 +104,13 @@ export function CacheManagementFeature(): React.JSX.Element {
             </div>
             <div>
               <div className="text-muted-foreground">Active</div>
-              <div className="font-mono text-sm text-green-600 dark:text-green-400">
+              <div className="font-mono text-sm text-primary">
                 {cacheStats.active}
               </div>
             </div>
             <div>
               <div className="text-muted-foreground">Stale</div>
-              <div className="font-mono text-sm text-orange-600 dark:text-orange-400">
+              <div className="font-mono text-sm text-foreground/70">
                 {cacheStats.stale}
               </div>
             </div>
@@ -145,7 +145,7 @@ export function CacheManagementFeature(): React.JSX.Element {
           variant="outline"
           size="sm"
           onClick={handleClearAll}
-          className="w-full text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20"
+          className="w-full text-destructive border-destructive/20 hover:bg-destructive/10"
         >
           Clear All Cache
         </NativeButton>

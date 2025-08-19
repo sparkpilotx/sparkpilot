@@ -66,7 +66,7 @@ export function DatabaseHealthFeature(): React.JSX.Element {
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div>
                 <div className="text-muted-foreground">Status</div>
-                <div className="font-mono text-green-600 dark:text-green-400">OK</div>
+                <div className="font-mono text-primary">OK</div>
               </div>
               <div>
                 <div className="text-muted-foreground">Response Time</div>

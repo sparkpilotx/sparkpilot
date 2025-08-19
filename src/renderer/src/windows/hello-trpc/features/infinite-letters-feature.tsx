@@ -112,7 +112,7 @@ export function InfiniteLettersFeature(): React.JSX.Element {
 
               <div className="text-xs text-muted-foreground">
                 {!hasNextPage && allLetters.length > 0 && (
-                  <span className="text-green-600 dark:text-green-400">✓ All letters loaded</span>
+                  <span className="text-primary">✓ All letters loaded</span>
                 )}
                 {hasNextPage && <span>More letters available...</span>}
               </div>
