@@ -2,7 +2,7 @@ import React from 'react'
 import { trpcClient } from '@/lib/trpc'
 import type { TRPCClientErrorLike } from '@trpc/client'
 import type { AppRouter } from '@shared/trpc'
-import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../native-components'
+import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../ui-components'
 import { useTour } from '../tour-system'
 
 export function LiveTicksFeature(): React.JSX.Element {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { NativeCard, SectionHeader, NativeButton } from './native-components'
+import { NativeCard, SectionHeader, NativeButton } from './ui-components'
 import { TourProvider, TourNavigation, useTour } from './tour-system'
 import {
   DatabaseHealthFeature,

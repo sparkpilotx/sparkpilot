@@ -1,6 +1,6 @@
 import React from 'react'
 import type { TourState, TourStep } from './types'
-import { NativeCard, SectionHeader, NativeButton, ProgressBar } from './native-components'
+import { NativeCard, SectionHeader, NativeButton, ProgressBar } from './ui-components'
 
 // Tour configuration with progressive disclosure
 export const TOUR_STEPS: Omit<TourStep, 'isCompleted' | 'isActive'>[] = [

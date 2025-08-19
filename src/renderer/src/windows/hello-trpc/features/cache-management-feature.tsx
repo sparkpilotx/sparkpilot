@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
-import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../native-components'
+import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../ui-components'
 import { useTour } from '../tour-system'
 
 export function CacheManagementFeature(): React.JSX.Element {

@@ -7,7 +7,7 @@ import {
   NativeInput,
   NativeButton,
   StatusIndicator,
-} from '../native-components'
+} from '../ui-components'
 import { useTour } from '../tour-system'
 
 export function EchoMutationFeature(): React.JSX.Element {

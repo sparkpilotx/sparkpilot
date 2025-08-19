@@ -1,29 +1,31 @@
 import React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/cn'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Progress } from '@/components/ui/progress'
+import { Badge } from '@/components/ui/badge'
 
-// Native macOS card component with proper spacing and shadows
-const cardVariants = cva(
-  'rounded-xl border border-border bg-card/80 backdrop-blur-xl supports-[backdrop-filter]:bg-card/60 transition-all duration-200',
-  {
-    variants: {
-      variant: {
-        default: 'shadow-sm hover:shadow-md',
-        feature: 'shadow-lg hover:shadow-xl',
-        tour: 'shadow-md bg-primary/5 hover:shadow-lg',
-      },
-      size: {
-        sm: 'p-4',
-        md: 'p-6',
-        lg: 'p-8',
-      },
+// Card wrapper using shadcn/ui Card
+const cardVariants = cva('', {
+  variants: {
+    variant: {
+      default: '',
+      feature: 'shadow-lg',
+      tour: 'bg-primary/5 border-dashed',
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
+    size: {
+      sm: '',
+      md: '',
+      lg: '',
     },
   },
-)
+  defaultVariants: {
+    variant: 'default',
+    size: 'md',
+  },
+})
 
 export interface NativeCardProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -33,16 +35,24 @@ export interface NativeCardProps
 
 export const NativeCard = React.forwardRef<HTMLDivElement, NativeCardProps>(
   ({ className, variant, size, children, ...props }, ref): React.JSX.Element => {
+    const cardSizeClasses = {
+      sm: 'p-4',
+      md: 'p-6', 
+      lg: 'p-8',
+    }
+
     return (
-      <div ref={ref} className={cn(cardVariants({ variant, size }), className)} {...props}>
-        {children}
-      </div>
+      <Card ref={ref} className={cn(cardVariants({ variant }), className)} {...props}>
+        <CardContent className={cn(cardSizeClasses[size || 'md'])}>
+          {children}
+        </CardContent>
+      </Card>
     )
   },
 )
 NativeCard.displayName = 'NativeCard'
 
-// Native macOS section header with proper typography
+// Section header using shadcn/ui Badge
 export interface SectionHeaderProps {
   title: string
   subtitle?: string
@@ -60,18 +70,14 @@ export const SectionHeader = ({
     <div className={cn('mb-4', className)}>
       <div className="flex items-center gap-2 mb-1">
         <h3 className="text-sm font-semibold text-foreground tracking-tight">{title}</h3>
-        {badge && (
-          <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-            {badge}
-          </span>
-        )}
+        {badge && <Badge variant="secondary">{badge}</Badge>}
       </div>
       {subtitle && <p className="text-xs text-muted-foreground leading-relaxed">{subtitle}</p>}
     </div>
   )
 }
 
-// Native macOS status indicator
+// Status indicator (keeping original logic)
 const statusVariants = cva('inline-flex items-center gap-1.5 text-xs font-medium', {
   variants: {
     status: {
@@ -111,7 +117,7 @@ export const StatusIndicator = ({
   )
 }
 
-// Native macOS input field
+// Input wrapper using shadcn/ui Input
 export interface NativeInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
@@ -122,14 +128,10 @@ export const NativeInput = React.forwardRef<HTMLInputElement, NativeInputProps>(
     return (
       <div className="space-y-1">
         {label && <label className="text-xs font-medium text-foreground/80">{label}</label>}
-        <input
+        <Input
           ref={ref}
           className={cn(
-            'w-full rounded-lg border border-input bg-background/50 px-3 py-2 text-sm',
-            'placeholder:text-muted-foreground/60',
-            'focus:border-primary focus:outline-none focus:ring-1 focus:ring-ring/20',
-            'transition-colors duration-200',
-            error && 'border-destructive focus:border-destructive focus:ring-destructive/20',
+            error && 'border-destructive focus-visible:ring-destructive/20',
             className,
           )}
           {...props}
@@ -141,33 +143,10 @@ export const NativeInput = React.forwardRef<HTMLInputElement, NativeInputProps>(
 )
 NativeInput.displayName = 'NativeInput'
 
-// Native macOS button variants
-const nativeButtonVariants = cva(
-  'inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-  {
-    variants: {
-      variant: {
-        primary: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        outline: 'border border-border bg-background hover:bg-accent hover:text-accent-foreground',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-      },
-      size: {
-        sm: 'px-3 py-1.5 text-xs',
-        md: 'px-4 py-2',
-        lg: 'px-6 py-3',
-      },
-    },
-    defaultVariants: {
-      variant: 'primary',
-      size: 'md',
-    },
-  },
-)
-
+// Button wrapper using shadcn/ui Button
 export interface NativeButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof nativeButtonVariants> {
+    VariantProps<typeof buttonVariants> {
   children: React.ReactNode
   isLoading?: boolean
 }
@@ -178,12 +157,11 @@ export const NativeButton = React.forwardRef<HTMLButtonElement, NativeButtonProp
     ref,
   ): React.JSX.Element => {
     return (
-      <button
+      <Button
         ref={ref}
-        className={cn(
-          nativeButtonVariants({ variant: variant ?? 'primary', size: size ?? 'md' }),
-          className,
-        )}
+        variant={variant}
+        size={size}
+        className={className}
         disabled={disabled || isLoading}
         {...props}
       >
@@ -191,13 +169,13 @@ export const NativeButton = React.forwardRef<HTMLButtonElement, NativeButtonProp
           <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
         )}
         {children}
-      </button>
+      </Button>
     )
   },
 )
 NativeButton.displayName = 'NativeButton'
 
-// Progress indicator for guided tour
+// Progress bar using shadcn/ui Progress
 export interface ProgressBarProps {
   progress: number
   total: number
@@ -219,12 +197,7 @@ export const ProgressBar = ({
           {progress} of {total}
         </span>
       </div>
-      <div className="w-full bg-secondary rounded-full h-1.5 overflow-hidden">
-        <div
-          className="bg-primary h-full rounded-full transition-all duration-300 ease-out"
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
+      <Progress value={percentage} className="h-1.5" />
     </div>
   )
 }
