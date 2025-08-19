@@ -1,0 +1,18 @@
+---
+globs: src/renderer/src/**/*.tsx
+alwaysApply: false
+---
+Component authoring rules (renderer)
+
+- Prefer explicit props and return types over React.FC.
+  - Do: `type Props = {}; const Component = ({}: Props): React.JSX.Element => { ... }`
+  - Avoid: `const Component: React.FC<Props> = (props) => { ... }`
+  - Rationale: prevents implicit children, simplifies generics, and avoids redundant typing with TS 5 + React 19.
+
+- Only accept `children` when needed.
+  - Do: `type Props = { children: React.ReactNode }` explicitly.
+
+- Use English-only identifiers and comments. Keep files in kebab-case.
+
+- Ensure `.app-region-drag`/`.app-region-no-drag` are used on window chrome to avoid drag conflicts.
+

@@ -1,0 +1,7 @@
+---
+alwaysApply: false
+---
+
+shadcn/ui configuration file: @components.json
+
+`npx shadcn@latest add` to add components that are not installed in `src/renderer/src/components/ui`
