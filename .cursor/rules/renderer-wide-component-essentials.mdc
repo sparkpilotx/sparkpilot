@@ -34,11 +34,14 @@ Component authoring rules (renderer)
 
 ## UI, styling, and accessibility
 
-- TailwindCSS v4 + shadcn/ui primitives.
-- `npx shadcn@latest add` to add components that are not installed in `src/renderer/src/components/ui`
+- TailwindCSS v4 + shadcn/ui primitives where they add value (Dialog, Popover, Tooltip, etc.).
 - Use CVA + tailwind-merge for component variants.
 - Rely on Radix primitives; ensure ARIA compliance and keyboard navigation parity.
 - Ensure `.app-region-drag`/`.app-region-no-drag` on window chrome to avoid drag conflicts.
+- Single source of truth for theming: all colors, radii, spacing tokens, and semantic roles come from `src/renderer/src/styles/globals.css`.
+  - Use CSS variables (e.g., `bg-background`, `text-foreground`, `text-destructive`, `ring`, `border`) exposed there.
+  - Do not hardcode colors in components; prefer semantic tokens and Tailwind utilities bound to globals.css.
+  - If a token is missing, add it to `globals.css` rather than inlining styles.
 
 ## Forbidden patterns
 
