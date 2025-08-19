@@ -77,74 +77,78 @@ function MainContent(): React.JSX.Element {
 
   if (!tourState.hasStarted) {
     return (
-      <div className="flex flex-1 items-center justify-center p-6">
-        <div className="w-full max-w-lg">
-          <TourNavigation />
+      <main className="flex-1 overflow-auto">
+        <div className="flex items-center justify-center min-h-full p-6">
+          <div className="w-full max-w-lg">
+            <TourNavigation />
+          </div>
         </div>
-      </div>
+      </main>
     )
   }
 
   const currentStep = tourState.steps[tourState.currentStep]
 
   return (
-    <div className="flex flex-1 flex-col p-6 space-y-6">
-      {/* Tour Navigation - Always visible during tour */}
-      <div className="w-full">
-        <TourNavigation />
-      </div>
+    <main className="flex-1 overflow-auto">
+      <div className="p-6 space-y-6">
+        {/* Tour Navigation - Always visible during tour */}
+        <div className="w-full">
+          <TourNavigation />
+        </div>
 
-      {/* Feature Content - Progressive disclosure based on current step */}
-      <div className="flex-1 w-full max-w-4xl mx-auto">
-        <SimpleErrorBoundary>
-          {currentStep.id === 'welcome' && (
-            <Card className="text-center shadow-lg">
-              <CardContent className="p-6">
-                <SectionHeader
-                  title="Welcome to tRPC"
-                  subtitle="Let's explore the building blocks of end-to-end typesafe APIs"
-                />
-                <div className="space-y-4 text-sm text-muted-foreground">
-                  <p className="leading-relaxed">
-                    tRPC enables you to easily build & consume fully typesafe APIs without schemas
-                    or code generation. This interactive guide will walk you through all the core
-                    concepts with working examples.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                    <div className="space-y-2">
-                      <h4 className="font-medium text-foreground">What you'll learn:</h4>
-                      <ul className="space-y-1 text-xs">
-                        <li>• Queries with queryOptions</li>
-                        <li>• Mutations with mutationOptions</li>
-                        <li>• Real-time subscriptions</li>
-                        <li>• Infinite pagination</li>
-                        <li>• Cache management</li>
-                      </ul>
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="font-medium text-foreground">Interactive features:</h4>
-                      <ul className="space-y-1 text-xs">
-                        <li>• Working database connections</li>
-                        <li>• Live data transformations</li>
-                        <li>• Real-time SSE streams</li>
-                        <li>• Pagination controls</li>
-                        <li>• Cache inspection tools</li>
-                      </ul>
+        {/* Feature Content - Progressive disclosure based on current step */}
+        <div className="w-full max-w-4xl mx-auto">
+          <SimpleErrorBoundary>
+            {currentStep.id === 'welcome' && (
+              <Card className="text-center shadow-lg">
+                <CardContent className="p-6">
+                  <SectionHeader
+                    title="Welcome to tRPC"
+                    subtitle="Let's explore the building blocks of end-to-end typesafe APIs"
+                  />
+                  <div className="space-y-4 text-sm text-muted-foreground">
+                    <p className="leading-relaxed">
+                      tRPC enables you to easily build & consume fully typesafe APIs without schemas
+                      or code generation. This interactive guide will walk you through all the core
+                      concepts with working examples.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-foreground">What you'll learn:</h4>
+                        <ul className="space-y-1 text-xs">
+                          <li>• Queries with queryOptions</li>
+                          <li>• Mutations with mutationOptions</li>
+                          <li>• Real-time subscriptions</li>
+                          <li>• Infinite pagination</li>
+                          <li>• Cache management</li>
+                        </ul>
+                      </div>
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-foreground">Interactive features:</h4>
+                        <ul className="space-y-1 text-xs">
+                          <li>• Working database connections</li>
+                          <li>• Live data transformations</li>
+                          <li>• Real-time SSE streams</li>
+                          <li>• Pagination controls</li>
+                          <li>• Cache inspection tools</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                </CardContent>
+              </Card>
+            )}
 
-          {currentStep.id === 'queries' && <DatabaseHealthFeature />}
-          {currentStep.id === 'mutations' && <EchoMutationFeature />}
-          {currentStep.id === 'subscriptions' && <LiveTicksFeature />}
-          {currentStep.id === 'infinite' && <InfiniteLettersFeature />}
-          {currentStep.id === 'cache' && <CacheManagementFeature />}
-        </SimpleErrorBoundary>
+            {currentStep.id === 'queries' && <DatabaseHealthFeature />}
+            {currentStep.id === 'mutations' && <EchoMutationFeature />}
+            {currentStep.id === 'subscriptions' && <LiveTicksFeature />}
+            {currentStep.id === 'infinite' && <InfiniteLettersFeature />}
+            {currentStep.id === 'cache' && <CacheManagementFeature />}
+          </SimpleErrorBoundary>
+        </div>
       </div>
-    </div>
+    </main>
   )
 }
 
