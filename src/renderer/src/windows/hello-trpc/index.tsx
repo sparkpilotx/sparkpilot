@@ -1,5 +1,5 @@
 import React from 'react'
-import { NativeCard, SectionHeader, NativeButton } from './ui-components'
+import { CardWrapper, SectionHeader, ButtonWrapper } from './ui-components'
 import { TourProvider, TourNavigation, useTour } from './tour-system'
 import {
   DatabaseHealthFeature,
@@ -44,7 +44,7 @@ class SimpleErrorBoundary extends React.Component<
       }
 
       return (
-        <NativeCard variant="feature" className="border-red-200 dark:border-red-800">
+        <CardWrapper variant="feature" className="border-red-200 dark:border-red-800">
           <SectionHeader
             title="Something went wrong"
             subtitle="An unexpected error occurred in the tRPC demonstration"
@@ -54,9 +54,9 @@ class SimpleErrorBoundary extends React.Component<
             <div className="text-sm text-destructive font-mono bg-destructive/10 p-3 rounded-lg">
               {this.state.error.message}
             </div>
-            <NativeButton variant="outline" onClick={reset} className="w-full">
+            <ButtonWrapper variant="outline" onClick={reset} className="w-full">
               Try Again
-            </NativeButton>
+            </ButtonWrapper>
           </div>
         </NativeCard>
       )
@@ -107,7 +107,7 @@ function MainContent(): React.JSX.Element {
       <div className="flex-1 w-full max-w-4xl mx-auto">
         <SimpleErrorBoundary>
           {currentStep.id === 'welcome' && (
-            <NativeCard variant="feature" className="text-center">
+            <CardWrapper variant="feature" className="text-center">
               <SectionHeader
                 title="Welcome to tRPC"
                 subtitle="Let's explore the building blocks of end-to-end typesafe APIs"
@@ -141,7 +141,7 @@ function MainContent(): React.JSX.Element {
                   </div>
                 </div>
               </div>
-            </NativeCard>
+            </CardWrapper>
           )}
 
           {currentStep.id === 'queries' && <DatabaseHealthFeature />}

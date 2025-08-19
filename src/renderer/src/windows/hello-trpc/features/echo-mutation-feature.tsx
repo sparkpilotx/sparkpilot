@@ -2,10 +2,10 @@ import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
 import {
-  NativeCard,
+  CardWrapper,
   SectionHeader,
-  NativeInput,
-  NativeButton,
+  InputWrapper,
+  ButtonWrapper,
   StatusIndicator,
 } from '../ui-components'
 import { useTour } from '../tour-system'
@@ -73,7 +73,7 @@ export function EchoMutationFeature(): React.JSX.Element {
   const { status, message } = getStatusInfo()
 
   return (
-    <NativeCard variant="feature">
+    <CardWrapper variant="feature">
       <SectionHeader
         title="Echo Mutation"
         subtitle="Server-side data transformation using tRPC's mutationOptions"
@@ -82,7 +82,7 @@ export function EchoMutationFeature(): React.JSX.Element {
 
       <div className="space-y-4">
         <form onSubmit={handleSubmit} className="space-y-3">
-          <NativeInput
+          <InputWrapper
             label="Text to Echo"
             placeholder="Type something to transform..."
             value={text}
@@ -91,14 +91,14 @@ export function EchoMutationFeature(): React.JSX.Element {
             disabled={echoMutation.isPending}
           />
 
-          <NativeButton
+          <ButtonWrapper
             type="submit"
             className="w-full"
             isLoading={echoMutation.isPending}
             disabled={!text.trim() || !!inputError}
           >
             {echoMutation.isPending ? 'Echoing...' : 'Echo Text'}
-          </NativeButton>
+          </ButtonWrapper>
         </form>
 
         <div className="rounded-lg bg-muted/30 p-4 border border-muted">
@@ -126,6 +126,6 @@ export function EchoMutationFeature(): React.JSX.Element {
           handle server state changes with automatic error handling and optimistic updates.
         </div>
       </div>
-    </NativeCard>
+    </CardWrapper>
   )
 }

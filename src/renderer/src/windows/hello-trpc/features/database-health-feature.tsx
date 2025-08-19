@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
-import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../ui-components'
+import { CardWrapper, SectionHeader, StatusIndicator, ButtonWrapper } from '../ui-components'
 import { useTour } from '../tour-system'
 
 export function DatabaseHealthFeature(): React.JSX.Element {
@@ -41,7 +41,7 @@ export function DatabaseHealthFeature(): React.JSX.Element {
   const { status, message } = getStatusInfo()
 
   return (
-    <NativeCard variant="feature">
+    <CardWrapper variant="feature">
       <SectionHeader
         title="Database Health Check"
         subtitle="Real-time query demonstrating tRPC's queryOptions pattern"
@@ -52,14 +52,14 @@ export function DatabaseHealthFeature(): React.JSX.Element {
         <div className="rounded-lg bg-muted/30 p-4 border border-muted">
           <div className="flex items-center justify-between mb-3">
             <StatusIndicator status={status}>{message}</StatusIndicator>
-            <NativeButton
+            <ButtonWrapper
               variant="outline"
               size="sm"
               onClick={handleRefresh}
               isLoading={healthQuery.isLoading || healthQuery.isFetching}
             >
               Check Health
-            </NativeButton>
+            </ButtonWrapper>
           </div>
 
           {healthQuery.data && (
@@ -86,6 +86,6 @@ export function DatabaseHealthFeature(): React.JSX.Element {
           cached, automatically retried on failure, and provides loading states.
         </div>
       </div>
-    </NativeCard>
+    </CardWrapper>
   )
 }

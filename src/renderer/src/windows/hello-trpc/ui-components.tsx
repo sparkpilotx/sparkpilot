@@ -27,13 +27,13 @@ const cardVariants = cva('', {
   },
 })
 
-export interface NativeCardProps
+export interface CardWrapperProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {
   children: React.ReactNode
 }
 
-export const NativeCard = React.forwardRef<HTMLDivElement, NativeCardProps>(
+export const CardWrapper = React.forwardRef<HTMLDivElement, CardWrapperProps>(
   ({ className, variant, size, children, ...props }, ref): React.JSX.Element => {
     const cardSizeClasses = {
       sm: 'p-4',
@@ -50,7 +50,7 @@ export const NativeCard = React.forwardRef<HTMLDivElement, NativeCardProps>(
     )
   },
 )
-NativeCard.displayName = 'NativeCard'
+CardWrapper.displayName = 'CardWrapper'
 
 // Section header using shadcn/ui Badge
 export interface SectionHeaderProps {
@@ -118,12 +118,12 @@ export const StatusIndicator = ({
 }
 
 // Input wrapper using shadcn/ui Input
-export interface NativeInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputWrapperProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
 }
 
-export const NativeInput = React.forwardRef<HTMLInputElement, NativeInputProps>(
+export const InputWrapper = React.forwardRef<HTMLInputElement, InputWrapperProps>(
   ({ label, error, className, ...props }, ref): React.JSX.Element => {
     return (
       <div className="space-y-1">
@@ -141,17 +141,17 @@ export const NativeInput = React.forwardRef<HTMLInputElement, NativeInputProps>(
     )
   },
 )
-NativeInput.displayName = 'NativeInput'
+InputWrapper.displayName = 'InputWrapper'
 
 // Button wrapper using shadcn/ui Button
-export interface NativeButtonProps
+export interface ButtonWrapperProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   children: React.ReactNode
   isLoading?: boolean
 }
 
-export const NativeButton = React.forwardRef<HTMLButtonElement, NativeButtonProps>(
+export const ButtonWrapper = React.forwardRef<HTMLButtonElement, ButtonWrapperProps>(
   (
     { className, variant, size, children, isLoading, disabled, ...props },
     ref,
@@ -173,7 +173,7 @@ export const NativeButton = React.forwardRef<HTMLButtonElement, NativeButtonProp
     )
   },
 )
-NativeButton.displayName = 'NativeButton'
+ButtonWrapper.displayName = 'ButtonWrapper'
 
 // Progress bar using shadcn/ui Progress
 export interface ProgressBarProps {

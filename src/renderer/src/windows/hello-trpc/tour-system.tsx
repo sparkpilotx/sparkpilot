@@ -1,6 +1,6 @@
 import React from 'react'
 import type { TourState, TourStep } from './types'
-import { NativeCard, SectionHeader, NativeButton, ProgressBar } from './ui-components'
+import { CardWrapper, SectionHeader, ButtonWrapper, ProgressBar } from './ui-components'
 
 // Tour configuration with progressive disclosure
 export const TOUR_STEPS: Omit<TourStep, 'isCompleted' | 'isActive'>[] = [
@@ -204,7 +204,7 @@ export function TourNavigation(): React.JSX.Element {
 
   if (!tourState.hasStarted) {
     return (
-      <NativeCard variant="tour" className="border-dashed">
+      <CardWrapper variant="tour" className="border-dashed">
         <SectionHeader
           title="Interactive tRPC Guide"
           subtitle="Learn tRPC concepts through hands-on examples"
@@ -214,11 +214,11 @@ export function TourNavigation(): React.JSX.Element {
             This guided tour will walk you through all the core tRPC patterns you'll use in
             production applications. Each step includes working examples you can interact with.
           </div>
-          <NativeButton onClick={startTour} className="w-full">
+          <ButtonWrapper onClick={startTour} className="w-full">
             Start Interactive Guide
-          </NativeButton>
+          </ButtonWrapper>
         </div>
-      </NativeCard>
+      </CardWrapper>
     )
   }
 
@@ -227,7 +227,7 @@ export function TourNavigation(): React.JSX.Element {
   const isLastStep = tourState.currentStep === tourState.steps.length - 1
 
   return (
-    <NativeCard variant="tour">
+    <CardWrapper variant="tour">
       <div className="space-y-4">
         <ProgressBar progress={completedSteps} total={tourState.steps.length} />
 
@@ -240,14 +240,14 @@ export function TourNavigation(): React.JSX.Element {
         </div>
 
         <div className="flex justify-between items-center">
-          <NativeButton
+          <ButtonWrapper
             variant="outline"
             size="sm"
             onClick={previousStep}
             disabled={tourState.currentStep === 0}
           >
             Previous
-          </NativeButton>
+          </ButtonWrapper>
 
           <div className="flex gap-1">
             {tourState.steps.map((step, index) => (
@@ -261,16 +261,16 @@ export function TourNavigation(): React.JSX.Element {
           </div>
 
           {isLastStep ? (
-            <NativeButton size="sm" onClick={completeTour}>
+            <ButtonWrapper size="sm" onClick={completeTour}>
               Complete Tour
-            </NativeButton>
+            </ButtonWrapper>
           ) : (
-            <NativeButton size="sm" onClick={nextStep}>
+            <ButtonWrapper size="sm" onClick={nextStep}>
               Next
-            </NativeButton>
+            </ButtonWrapper>
           )}
         </div>
       </div>
-    </NativeCard>
+    </CardWrapper>
   )
 }

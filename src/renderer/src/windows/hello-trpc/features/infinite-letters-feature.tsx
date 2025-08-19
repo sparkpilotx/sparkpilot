@@ -1,7 +1,7 @@
 import React from 'react'
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
-import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../ui-components'
+import { CardWrapper, SectionHeader, StatusIndicator, ButtonWrapper } from '../ui-components'
 import { useTour } from '../tour-system'
 
 export function InfiniteLettersFeature(): React.JSX.Element {
@@ -62,7 +62,7 @@ export function InfiniteLettersFeature(): React.JSX.Element {
   const { status, message } = getStatusInfo()
 
   return (
-    <NativeCard variant="feature">
+    <CardWrapper variant="feature">
       <SectionHeader
         title="Alphabet Pagination"
         subtitle="Infinite scroll with cursor-based pagination"
@@ -75,24 +75,24 @@ export function InfiniteLettersFeature(): React.JSX.Element {
             <StatusIndicator status={status}>{message}</StatusIndicator>
 
             <div className="flex gap-2">
-              <NativeButton
+              <ButtonWrapper
                 variant="outline"
                 size="sm"
                 onClick={handleReset}
                 disabled={lettersQuery.isLoading}
               >
                 Reset
-              </NativeButton>
+              </ButtonWrapper>
 
               {hasNextPage && (
-                <NativeButton
+                <ButtonWrapper
                   size="sm"
                   onClick={handleLoadMore}
                   isLoading={isFetchingNextPage}
                   disabled={!hasNextPage}
                 >
                   Load More
-                </NativeButton>
+                </ButtonWrapper>
               )}
             </div>
           </div>
@@ -130,6 +130,6 @@ export function InfiniteLettersFeature(): React.JSX.Element {
           scroll patterns.
         </div>
       </div>
-    </NativeCard>
+    </CardWrapper>
   )
 }

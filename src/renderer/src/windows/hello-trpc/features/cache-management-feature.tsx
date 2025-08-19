@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
-import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../ui-components'
+import { CardWrapper, SectionHeader, StatusIndicator, ButtonWrapper } from '../ui-components'
 import { useTour } from '../tour-system'
 
 export function CacheManagementFeature(): React.JSX.Element {
@@ -80,7 +80,7 @@ export function CacheManagementFeature(): React.JSX.Element {
   const { status, message } = getStatusInfo()
 
   return (
-    <NativeCard variant="feature">
+    <CardWrapper variant="feature">
       <SectionHeader
         title="Cache Management"
         subtitle="Control query cache with precision using queryKey, pathKey, and filters"
@@ -120,31 +120,31 @@ export function CacheManagementFeature(): React.JSX.Element {
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <NativeButton variant="outline" size="sm" onClick={handleInvalidateSpecific}>
+          <ButtonWrapper variant="outline" size="sm" onClick={handleInvalidateSpecific}>
             Invalidate Time
-          </NativeButton>
+          </ButtonWrapper>
 
-          <NativeButton variant="outline" size="sm" onClick={handleInvalidateRouter}>
+          <ButtonWrapper variant="outline" size="sm" onClick={handleInvalidateRouter}>
             Invalidate Router
-          </NativeButton>
+          </ButtonWrapper>
 
-          <NativeButton variant="outline" size="sm" onClick={handlePrefetchTime}>
+          <ButtonWrapper variant="outline" size="sm" onClick={handlePrefetchTime}>
             Prefetch Time
-          </NativeButton>
+          </ButtonWrapper>
 
-          <NativeButton variant="outline" size="sm" onClick={handleFilterInvalidate}>
+          <ButtonWrapper variant="outline" size="sm" onClick={handleFilterInvalidate}>
             Filter Invalidate
-          </NativeButton>
+          </ButtonWrapper>
         </div>
 
-        <NativeButton
+        <ButtonWrapper
           variant="outline"
           size="sm"
           onClick={handleClearAll}
           className="w-full text-destructive border-destructive/20 hover:bg-destructive/10"
         >
           Clear All Cache
-        </NativeButton>
+        </ButtonWrapper>
 
         <div className="text-xs text-muted-foreground leading-relaxed">
           <strong>Concept:</strong> Use{' '}
@@ -156,6 +156,6 @@ export function CacheManagementFeature(): React.JSX.Element {
           cache control with predicates.
         </div>
       </div>
-    </NativeCard>
+    </CardWrapper>
   )
 }

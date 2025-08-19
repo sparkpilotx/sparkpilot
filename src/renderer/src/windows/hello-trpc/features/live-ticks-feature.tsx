@@ -2,7 +2,7 @@ import React from 'react'
 import { trpcClient } from '@/lib/trpc'
 import type { TRPCClientErrorLike } from '@trpc/client'
 import type { AppRouter } from '@shared/trpc'
-import { NativeCard, SectionHeader, StatusIndicator, NativeButton } from '../ui-components'
+import { CardWrapper, SectionHeader, StatusIndicator, ButtonWrapper } from '../ui-components'
 import { useTour } from '../tour-system'
 
 export function LiveTicksFeature(): React.JSX.Element {
@@ -102,7 +102,7 @@ export function LiveTicksFeature(): React.JSX.Element {
   }
 
   return (
-    <NativeCard variant="feature">
+    <CardWrapper variant="feature">
       <SectionHeader
         title="Live Timestamps"
         subtitle="Real-time subscriptions via Server-Sent Events"
@@ -116,19 +116,19 @@ export function LiveTicksFeature(): React.JSX.Element {
 
             <div className="flex gap-2">
               {!isConnected && (
-                <NativeButton
+                <ButtonWrapper
                   variant="outline"
                   size="sm"
                   onClick={connect}
                   isLoading={isConnecting}
                 >
                   Connect
-                </NativeButton>
+                </ButtonWrapper>
               )}
               {isConnected && (
-                <NativeButton variant="outline" size="sm" onClick={disconnect}>
+                <ButtonWrapper variant="outline" size="sm" onClick={disconnect}>
                   Disconnect
-                </NativeButton>
+                </ButtonWrapper>
               )}
             </div>
           </div>
@@ -165,6 +165,6 @@ export function LiveTicksFeature(): React.JSX.Element {
           reconnects and handles connection errors gracefully.
         </div>
       </div>
-    </NativeCard>
+    </CardWrapper>
   )
 }
