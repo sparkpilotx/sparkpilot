@@ -155,7 +155,11 @@ const HelloTrpc = ({}: HelloTrpcProps): React.JSX.Element => {
     <SimpleErrorBoundary>
       <TourProvider>
         <div className="flex h-screen flex-col bg-gradient-to-br from-background to-background/50">
-          <WindowChrome title="SparkPilot • tRPC Interactive Guide" />
+          <WindowChrome
+            title="SparkPilot • tRPC Interactive Guide"
+            subTitle="End-to-end typesafe APIs"
+            shortDescription="tRPC v11"
+          />
           <MainContent />
         </div>
       </TourProvider>

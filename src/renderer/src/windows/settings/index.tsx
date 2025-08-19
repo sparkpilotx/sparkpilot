@@ -5,7 +5,11 @@ type SettingsProps = {}
 const Settings = ({}: SettingsProps): React.JSX.Element => {
   return (
     <div className="flex h-screen flex-col">
-      <WindowChrome title="SparkPilot • Settings" />
+      <WindowChrome
+        title="SparkPilot • Settings"
+        subTitle="Application configuration"
+        shortDescription="Settings"
+      />
       <main className="flex flex-1 items-center justify-center p-6">
         <div className="text-sm text-muted-foreground">Settings content will go here</div>
       </main>
