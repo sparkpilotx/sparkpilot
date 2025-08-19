@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { SectionHeader } from './shared-components'
+import { WindowChrome } from '@/components/ui/window-chrome'
 import { TourProvider, TourNavigation, useTour } from './tour-system'
 import {
   DatabaseHealthFeature,
@@ -68,15 +69,6 @@ class SimpleErrorBoundary extends React.Component<
 
     return this.props.children
   }
-}
-
-// Window chrome with native macOS styling
-function WindowChrome(): React.JSX.Element {
-  return (
-    <div className="app-region-drag flex items-center justify-between gap-2 border-b bg-background/70 pl-20 pr-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <div className="text-sm font-medium text-foreground">SparkPilot • tRPC Interactive Guide</div>
-    </div>
-  )
 }
 
 // Main content area with conditional rendering based on tour state
@@ -163,7 +155,7 @@ const HelloTrpc = ({}: HelloTrpcProps): React.JSX.Element => {
     <SimpleErrorBoundary>
       <TourProvider>
         <div className="flex h-screen flex-col bg-gradient-to-br from-background to-background/50">
-          <WindowChrome />
+          <WindowChrome title="SparkPilot • tRPC Interactive Guide" />
           <MainContent />
         </div>
       </TourProvider>
