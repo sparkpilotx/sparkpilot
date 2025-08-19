@@ -21,12 +21,12 @@ References:
 - **Server**: Embedded standalone HTTP tRPC server in Electron main process
   - Base URL from single source of truth: `VITE_TRPC_HTTP_URL`
   - Default in `.env.local`: `http://127.0.0.1:3001/trpc`
-  - Accepts nested paths under the endpoint (e.g., `/trpc/samples.hello.hello`)
+  - Accepts nested paths under the endpoint (e.g., `/trpc/helloTrpc.time`)
 - **Client**: TanStack React Query v5 + tRPC v11 client in renderer
   - Batching: `httpBatchLink`
   - Subscriptions: `httpSubscriptionLink` (SSE)
   - Split transport with `splitLink` by `op.type === 'subscription'`
-  - `loggerLink` enabled in development
+  - Optional dev logging with `loggerLink` (not enabled by default in this codebase)
 
 ---
 
@@ -35,17 +35,19 @@ References:
 - **Files**
   - `src/main/trpc/trpc.ts` — tRPC init (transformer, errorFormatter), base procedures
   - `src/main/trpc/router.ts` — Compose domain routers into `appRouter`; export `AppRouter`
-  - `src/main/trpc/routers/samples/index.ts` — `samplesRouter`
-  - `src/main/trpc/routers/samples/hello-query.ts` — Hello query sample procedures
+  - `src/main/trpc/routers/hello-trpc/index.ts` — `helloTrpcRouter` (domain procedures)
   - `src/main/trpc/server.ts` — Start/stop server and route `/trpc/*`
   - `src/main/index.ts` — Wires server start on `app.whenReady()` and stop on quit
   - `src/main/trpc/context.ts` — Provides per-request context
   - `src/main/shared/trpc.ts` — Shared AppRouter type export for cross-process access
 
-- **Router highlights**
-  - `samples.hello.hello()` → Basic greeting with timestamp and platform info
-  - `samples.hello.helloWithName({ name: string })` → Personalized greeting with Zod validation
-  - `samples.hello.echo({ text?, number?, boolean?, array? })` → Data serialization testing
+- **Router highlights (helloTrpc)**
+  - `helloTrpc.db` → Database connectivity health check (`SELECT 1`) with duration
+  - `helloTrpc.time` → Returns current ISO timestamp
+  - `helloTrpc.helloWithName({ name: string })` → Personalized greeting with Zod validation
+  - `helloTrpc.echo({ text: string })` → Uppercases text (mutation)
+  - `helloTrpc.letters({ cursor?, pageSize? })` → Cursor-based pagination over alphabet
+  - `helloTrpc.ticks` → Subscription streaming ISO timestamps (SSE)
 
 - **Server adapter** (`src/main/trpc/server.ts`)
   - Uses `@trpc/server/adapters/standalone` `createHTTPHandler`
@@ -59,20 +61,18 @@ References:
 - **File**: `src/renderer/src/lib/trpc.ts`
   - Exports a shared `queryClient` (TanStack React Query)
   - Configures links with:
-    - `loggerLink()` (dev only)
     - `splitLink({ condition: op.type === 'subscription', true: httpSubscriptionLink, false: httpBatchLink })`
+    - Note: `loggerLink` can be added in dev if needed
   - Reads API URL from `VITE_TRPC_HTTP_URL` (default in `.env.local`: `http://127.0.0.1:3001/trpc`)
   - Exposes three utilities:
     - `trpcClient` — low-level client for imperative `.query()` / `.mutate()` / `.subscribe()`
-    - `trpcProxy` — proxy client for ergonomic calls (e.g., `trpcProxy.samples.hello.hello.query()`)
+    - `trpcProxy` — proxy client for ergonomic calls (e.g., `trpcProxy.helloTrpc.time.query()`)
     - `trpc` — TanStack options proxy for `.queryOptions()` / `.mutationOptions()`
 
 - **Provider wiring**
-  - The renderer is already wrapped with `QueryClientProvider` in `src/renderer/index.tsx` using the exported `queryClient`, and includes React Query Devtools in dev.
-- **Sample Components**
-  - `src/renderer/src/components/samples/` — Organized sample components by router
-  - `src/renderer/src/components/samples/hello-query/` — Hello query router samples
-  - `src/renderer/src/components/samples/samples-container.tsx` — Main container organizing all router samples
+  - The renderer is wrapped with `QueryClientProvider` in `src/renderer/index.tsx` using the exported `queryClient`.
+- **Interactive examples**
+  - A guided window at `src/renderer/src/windows/hello-trpc/` demonstrates queries, mutations, subscriptions (SSE), infinite queries, and cache management.
 
 ---
 
@@ -109,19 +109,21 @@ Examples:
 - Imperative (proxy client):
 
 ```ts
-import { trpcProxy } from '@/lib/trpc'
-const greeting = await trpcProxy.samples.hello.hello.query() // Basic greeting
-const personalized = await trpcProxy.samples.hello.helloWithName.query({ name: 'Simon' })
-const echo = await trpcProxy.samples.hello.echo.query({ text: 'Hello', number: 42 })
+import { trpcProxy, trpcClient } from '@/lib/trpc'
+// Query
+const now = await trpcProxy.helloTrpc.time.query()
+const greeting = await trpcProxy.helloTrpc.helloWithName.query({ name: 'Simon' })
+// Mutation
+const echoed = await trpcClient.helloTrpc.echo.mutate({ text: 'Hello' })
 ```
 
 - With TanStack Query options proxy:
 
 ```ts
 import { trpc } from '@/lib/trpc'
-const helloQuery = trpc.samples.hello.hello.queryOptions()
-const nameQuery = trpc.samples.hello.helloWithName.queryOptions({ name: 'User' })
-// useQuery(helloQuery)
+const timeQuery = trpc.helloTrpc.time.queryOptions()
+const nameQuery = trpc.helloTrpc.helloWithName.queryOptions({ name: 'User' })
+// useQuery(timeQuery)
 // useQuery(nameQuery)
 ```
 
@@ -131,7 +133,7 @@ const nameQuery = trpc.samples.hello.helloWithName.queryOptions({ name: 'User' }
 import { useQuery } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
 
-const { data, isLoading, error } = useQuery(trpc.samples.hello.hello.queryOptions())
+const { data, isLoading, error } = useQuery(trpc.helloTrpc.time.queryOptions())
 ```
 
 ---
@@ -165,7 +167,7 @@ npm run dev
 - **404 on `/trpc/<procedure>`**
   - Ensure server is running and the route rewriter is active (we strip `/trpc` before delegating)
   - Confirm `VITE_TRPC_HTTP_URL` host/port matches
-  - Check that the procedure path matches the router structure (e.g., `samples.hello.hello`)
+  - Check that the procedure path matches the router structure (e.g., `helloTrpc.time`)
 
 - **CSP errors** (Refused to connect due to `default-src 'self'`)
   - Ensure `src/renderer/index.html` includes `connect-src 'self' http: https: data: blob: ws:`
@@ -177,7 +179,7 @@ npm run dev
 - **CORS/methods**
   - The server allows `GET, POST, OPTIONS` to support SSE, queries, and mutations via `httpBatchLink`.
 
-- **TypeScript errors in sample components**
+- **TypeScript errors in renderer**
   - Ensure `tsconfig.web.json` includes `src/main/trpc/**/*` for type access
   - Verify shared types are properly exported from `src/main/shared/trpc.ts`
 
@@ -185,10 +187,10 @@ npm run dev
 
 ## Recommended usage patterns
 
-- **trpcProxy**: ergonomic imperative calls, including subscriptions
-- **trpcClient**: low-level imperative calls in utilities
+- **trpcProxy**: ergonomic imperative query calls
+- **trpcClient**: low-level imperative calls (queries/mutations/subscriptions)
 - **trpc**: options proxy for declarative TanStack Query hooks
-- **Sample Components**: Use the organized sample components in `src/renderer/src/components/samples/` for reference
+- **Interactive Guide**: Use `src/renderer/src/windows/hello-trpc/` as a reference for end-to-end patterns
 
 ---
 
@@ -197,8 +199,7 @@ npm run dev
 - **Server**
   - `src/main/trpc/trpc.ts`
   - `src/main/trpc/router.ts`
-  - `src/main/trpc/routers/samples/index.ts`
-  - `src/main/trpc/routers/samples/hello-query.ts`
+  - `src/main/trpc/routers/hello-trpc/index.ts`
   - `src/main/trpc/server.ts`
   - `src/main/trpc/context.ts`
   - `src/main/index.ts`
@@ -207,12 +208,10 @@ npm run dev
 - **Client**
   - `src/renderer/src/lib/trpc.ts`
   - `src/renderer/index.tsx` (provider wiring)
-  - `src/renderer/src/App.tsx` (sample components integration)
+  - `src/renderer/src/windows/hello-trpc/` (interactive guide)
 
-- **Sample Components**
-  - `src/renderer/src/components/samples/samples-container.tsx`
-  - `src/renderer/src/components/samples/hello-query/`
-  - `src/renderer/src/components/samples/index.ts`
+- **Interactive Guide**
+  - `src/renderer/src/windows/hello-trpc/`
 
 - **Shared typing**
   - `src/main/shared/trpc.ts` (re-exports `AppRouter`)
