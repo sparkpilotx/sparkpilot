@@ -1,6 +1,33 @@
 import React from 'react'
 import type { TourState, TourStep } from './types'
-import { CardWrapper, SectionHeader, ButtonWrapper, ProgressBar } from './ui-components'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import { cn } from '@/lib/cn'
+import { SectionHeader } from './shared-components'
+
+// Progress bar component
+interface ProgressBarProps {
+  progress: number
+  total: number
+  className?: string
+}
+
+const ProgressBar = ({ progress, total, className }: ProgressBarProps): React.JSX.Element => {
+  const percentage = Math.min(100, Math.max(0, (progress / total) * 100))
+
+  return (
+    <div className={cn('space-y-2', className)}>
+      <div className="flex justify-between items-center">
+        <span className="text-xs font-medium text-foreground/80">Progress</span>
+        <span className="text-xs text-muted-foreground">
+          {progress} of {total}
+        </span>
+      </div>
+      <Progress value={percentage} className="h-1.5" />
+    </div>
+  )
+}
 
 // Tour configuration with progressive disclosure
 export const TOUR_STEPS: Omit<TourStep, 'isCompleted' | 'isActive'>[] = [
@@ -204,21 +231,23 @@ export function TourNavigation(): React.JSX.Element {
 
   if (!tourState.hasStarted) {
     return (
-      <CardWrapper variant="tour" className="border-dashed">
-        <SectionHeader
-          title="Interactive tRPC Guide"
-          subtitle="Learn tRPC concepts through hands-on examples"
-        />
-        <div className="space-y-4">
-          <div className="text-sm text-muted-foreground leading-relaxed">
-            This guided tour will walk you through all the core tRPC patterns you'll use in
-            production applications. Each step includes working examples you can interact with.
+      <Card className="bg-primary/5 border-dashed">
+        <CardContent className="p-6">
+          <SectionHeader
+            title="Interactive tRPC Guide"
+            subtitle="Learn tRPC concepts through hands-on examples"
+          />
+          <div className="space-y-4">
+            <div className="text-sm text-muted-foreground leading-relaxed">
+              This guided tour will walk you through all the core tRPC patterns you'll use in
+              production applications. Each step includes working examples you can interact with.
+            </div>
+            <Button onClick={startTour} className="w-full">
+              Start Interactive Guide
+            </Button>
           </div>
-          <ButtonWrapper onClick={startTour} className="w-full">
-            Start Interactive Guide
-          </ButtonWrapper>
-        </div>
-      </CardWrapper>
+        </CardContent>
+      </Card>
     )
   }
 
@@ -227,50 +256,52 @@ export function TourNavigation(): React.JSX.Element {
   const isLastStep = tourState.currentStep === tourState.steps.length - 1
 
   return (
-    <CardWrapper variant="tour">
-      <div className="space-y-4">
-        <ProgressBar progress={completedSteps} total={tourState.steps.length} />
+    <Card className="bg-primary/5">
+      <CardContent className="p-6">
+        <div className="space-y-4">
+          <ProgressBar progress={completedSteps} total={tourState.steps.length} />
 
-        <div>
-          <SectionHeader
-            title={currentStep.title}
-            subtitle={currentStep.description}
-            badge={currentStep.concept}
-          />
-        </div>
-
-        <div className="flex justify-between items-center">
-          <ButtonWrapper
-            variant="outline"
-            size="sm"
-            onClick={previousStep}
-            disabled={tourState.currentStep === 0}
-          >
-            Previous
-          </ButtonWrapper>
-
-          <div className="flex gap-1">
-            {tourState.steps.map((step, index) => (
-              <div
-                key={step.id}
-                className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                  step.isCompleted ? 'bg-green-500' : step.isActive ? 'bg-primary' : 'bg-muted'
-                }`}
-              />
-            ))}
+          <div>
+            <SectionHeader
+              title={currentStep.title}
+              subtitle={currentStep.description}
+              badge={currentStep.concept}
+            />
           </div>
 
-          {isLastStep ? (
-            <ButtonWrapper size="sm" onClick={completeTour}>
-              Complete Tour
-            </ButtonWrapper>
-          ) : (
-            <ButtonWrapper size="sm" onClick={nextStep}>
-              Next
-            </ButtonWrapper>
-          )}
+          <div className="flex justify-between items-center">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={previousStep}
+              disabled={tourState.currentStep === 0}
+            >
+              Previous
+            </Button>
+
+            <div className="flex gap-1">
+              {tourState.steps.map((step, index) => (
+                <div
+                  key={step.id}
+                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                    step.isCompleted ? 'bg-green-500' : step.isActive ? 'bg-primary' : 'bg-muted'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {isLastStep ? (
+              <Button size="sm" onClick={completeTour}>
+                Complete Tour
+              </Button>
+            ) : (
+              <Button size="sm" onClick={nextStep}>
+                Next
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-    </CardWrapper>
+      </CardContent>
+    </Card>
   )
 }

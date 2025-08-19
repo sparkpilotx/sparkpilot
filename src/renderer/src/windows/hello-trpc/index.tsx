@@ -1,5 +1,7 @@
 import React from 'react'
-import { CardWrapper, SectionHeader, ButtonWrapper } from './ui-components'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { SectionHeader } from './shared-components'
 import { TourProvider, TourNavigation, useTour } from './tour-system'
 import {
   DatabaseHealthFeature,
@@ -44,21 +46,23 @@ class SimpleErrorBoundary extends React.Component<
       }
 
       return (
-        <CardWrapper variant="feature" className="border-red-200 dark:border-red-800">
-          <SectionHeader
-            title="Something went wrong"
-            subtitle="An unexpected error occurred in the tRPC demonstration"
-            badge="Error"
-          />
-          <div className="space-y-4">
-            <div className="text-sm text-destructive font-mono bg-destructive/10 p-3 rounded-lg">
-              {this.state.error.message}
+        <Card className="border-red-200 dark:border-red-800 shadow-lg">
+          <CardContent className="p-6">
+            <SectionHeader
+              title="Something went wrong"
+              subtitle="An unexpected error occurred in the tRPC demonstration"
+              badge="Error"
+            />
+            <div className="space-y-4">
+              <div className="text-sm text-destructive font-mono bg-destructive/10 p-3 rounded-lg">
+                {this.state.error.message}
+              </div>
+              <Button variant="outline" onClick={reset} className="w-full">
+                Try Again
+              </Button>
             </div>
-            <ButtonWrapper variant="outline" onClick={reset} className="w-full">
-              Try Again
-            </ButtonWrapper>
-          </div>
-        </NativeCard>
+          </CardContent>
+        </Card>
       )
     }
 
@@ -107,41 +111,43 @@ function MainContent(): React.JSX.Element {
       <div className="flex-1 w-full max-w-4xl mx-auto">
         <SimpleErrorBoundary>
           {currentStep.id === 'welcome' && (
-            <CardWrapper variant="feature" className="text-center">
-              <SectionHeader
-                title="Welcome to tRPC"
-                subtitle="Let's explore the building blocks of end-to-end typesafe APIs"
-              />
-              <div className="space-y-4 text-sm text-muted-foreground">
-                <p className="leading-relaxed">
-                  tRPC enables you to easily build & consume fully typesafe APIs without schemas or
-                  code generation. This interactive guide will walk you through all the core
-                  concepts with working examples.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-foreground">What you'll learn:</h4>
-                    <ul className="space-y-1 text-xs">
-                      <li>• Queries with queryOptions</li>
-                      <li>• Mutations with mutationOptions</li>
-                      <li>• Real-time subscriptions</li>
-                      <li>• Infinite pagination</li>
-                      <li>• Cache management</li>
-                    </ul>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-foreground">Interactive features:</h4>
-                    <ul className="space-y-1 text-xs">
-                      <li>• Working database connections</li>
-                      <li>• Live data transformations</li>
-                      <li>• Real-time SSE streams</li>
-                      <li>• Pagination controls</li>
-                      <li>• Cache inspection tools</li>
-                    </ul>
+            <Card className="text-center shadow-lg">
+              <CardContent className="p-6">
+                <SectionHeader
+                  title="Welcome to tRPC"
+                  subtitle="Let's explore the building blocks of end-to-end typesafe APIs"
+                />
+                <div className="space-y-4 text-sm text-muted-foreground">
+                  <p className="leading-relaxed">
+                    tRPC enables you to easily build & consume fully typesafe APIs without schemas
+                    or code generation. This interactive guide will walk you through all the core
+                    concepts with working examples.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-foreground">What you'll learn:</h4>
+                      <ul className="space-y-1 text-xs">
+                        <li>• Queries with queryOptions</li>
+                        <li>• Mutations with mutationOptions</li>
+                        <li>• Real-time subscriptions</li>
+                        <li>• Infinite pagination</li>
+                        <li>• Cache management</li>
+                      </ul>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-foreground">Interactive features:</h4>
+                      <ul className="space-y-1 text-xs">
+                        <li>• Working database connections</li>
+                        <li>• Live data transformations</li>
+                        <li>• Real-time SSE streams</li>
+                        <li>• Pagination controls</li>
+                        <li>• Cache inspection tools</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardWrapper>
+              </CardContent>
+            </Card>
           )}
 
           {currentStep.id === 'queries' && <DatabaseHealthFeature />}

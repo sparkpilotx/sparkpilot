@@ -2,7 +2,9 @@ import React from 'react'
 import { trpcClient } from '@/lib/trpc'
 import type { TRPCClientErrorLike } from '@trpc/client'
 import type { AppRouter } from '@shared/trpc'
-import { CardWrapper, SectionHeader, StatusIndicator, ButtonWrapper } from '../ui-components'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { SectionHeader, StatusIndicator } from '../shared-components'
 import { useTour } from '../tour-system'
 
 export function LiveTicksFeature(): React.JSX.Element {
@@ -102,69 +104,69 @@ export function LiveTicksFeature(): React.JSX.Element {
   }
 
   return (
-    <CardWrapper variant="feature">
-      <SectionHeader
-        title="Live Timestamps"
-        subtitle="Real-time subscriptions via Server-Sent Events"
-        badge="Subscription"
-      />
+    <Card className="shadow-lg">
+      <CardContent className="p-6">
+        <SectionHeader
+          title="Live Timestamps"
+          subtitle="Real-time subscriptions via Server-Sent Events"
+          badge="Subscription"
+        />
 
-      <div className="space-y-4">
-        <div className="rounded-lg bg-muted/30 p-4 border border-muted">
-          <div className="flex items-center justify-between mb-3">
-            <StatusIndicator status={status}>{message}</StatusIndicator>
+        <div className="space-y-4">
+          <div className="rounded-lg bg-muted/30 p-4 border border-muted">
+            <div className="flex items-center justify-between mb-3">
+              <StatusIndicator status={status}>{message}</StatusIndicator>
 
-            <div className="flex gap-2">
-              {!isConnected && (
-                <ButtonWrapper
-                  variant="outline"
-                  size="sm"
-                  onClick={connect}
-                  isLoading={isConnecting}
-                >
-                  Connect
-                </ButtonWrapper>
-              )}
-              {isConnected && (
-                <ButtonWrapper variant="outline" size="sm" onClick={disconnect}>
-                  Disconnect
-                </ButtonWrapper>
-              )}
+              <div className="flex gap-2">
+                {!isConnected && (
+                  <Button variant="outline" size="sm" onClick={connect} disabled={isConnecting}>
+                    {isConnecting && (
+                      <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin mr-2" />
+                    )}
+                    Connect
+                  </Button>
+                )}
+                {isConnected && (
+                  <Button variant="outline" size="sm" onClick={disconnect}>
+                    Disconnect
+                  </Button>
+                )}
+              </div>
             </div>
+
+            {tick &&
+              (() => {
+                const { time, date } = formatTimestamp(tick)
+                return (
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-4 text-xs">
+                      <div>
+                        <div className="text-muted-foreground">Current Time</div>
+                        <div className="font-mono text-lg text-primary font-semibold">{time}</div>
+                      </div>
+                      <div>
+                        <div className="text-muted-foreground">Date</div>
+                        <div className="font-mono text-sm text-foreground">{date}</div>
+                      </div>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Last update: {new Date(tick).toISOString()}
+                    </div>
+                  </div>
+                )
+              })()}
           </div>
 
-          {tick &&
-            (() => {
-              const { time, date } = formatTimestamp(tick)
-              return (
-                <div className="space-y-2">
-                  <div className="grid grid-cols-2 gap-4 text-xs">
-                    <div>
-                      <div className="text-muted-foreground">Current Time</div>
-                      <div className="font-mono text-lg text-primary font-semibold">{time}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground">Date</div>
-                      <div className="font-mono text-sm text-foreground">{date}</div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    Last update: {new Date(tick).toISOString()}
-                  </div>
-                </div>
-              )
-            })()}
+          <div className="text-xs text-muted-foreground leading-relaxed">
+            <strong>Concept:</strong> This uses{' '}
+            <code className="text-foreground bg-muted px-1 rounded">
+              trpcClient.helloTrpc.ticks.subscribe()
+            </code>
+            with Server-Sent Events for real-time data streaming. The subscription automatically
+            reconnects and handles connection errors gracefully.
+          </div>
         </div>
-
-        <div className="text-xs text-muted-foreground leading-relaxed">
-          <strong>Concept:</strong> This uses{' '}
-          <code className="text-foreground bg-muted px-1 rounded">
-            trpcClient.helloTrpc.ticks.subscribe()
-          </code>
-          with Server-Sent Events for real-time data streaming. The subscription automatically
-          reconnects and handles connection errors gracefully.
-        </div>
-      </div>
-    </CardWrapper>
+      </CardContent>
+    </Card>
   )
 }

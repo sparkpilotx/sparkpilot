@@ -1,7 +1,9 @@
 import React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
-import { CardWrapper, SectionHeader, StatusIndicator, ButtonWrapper } from '../ui-components'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { SectionHeader, StatusIndicator } from '../shared-components'
 import { useTour } from '../tour-system'
 
 export function CacheManagementFeature(): React.JSX.Element {
@@ -80,82 +82,84 @@ export function CacheManagementFeature(): React.JSX.Element {
   const { status, message } = getStatusInfo()
 
   return (
-    <CardWrapper variant="feature">
-      <SectionHeader
-        title="Cache Management"
-        subtitle="Control query cache with precision using queryKey, pathKey, and filters"
-        badge="Cache Control"
-      />
+    <Card className="shadow-lg">
+      <CardContent className="p-6">
+        <SectionHeader
+          title="Cache Management"
+          subtitle="Control query cache with precision using queryKey, pathKey, and filters"
+          badge="Cache Control"
+        />
 
-      <div className="space-y-4">
-        <div className="rounded-lg bg-muted/30 p-4 border border-muted">
-          <div className="flex items-center justify-between mb-3">
-            <StatusIndicator status={status}>{message}</StatusIndicator>
+        <div className="space-y-4">
+          <div className="rounded-lg bg-muted/30 p-4 border border-muted">
+            <div className="flex items-center justify-between mb-3">
+              <StatusIndicator status={status}>{message}</StatusIndicator>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-xs mb-4">
+              <div>
+                <div className="text-muted-foreground">Total Queries</div>
+                <div className="font-mono text-lg text-foreground">{cacheStats.total}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground">tRPC Queries</div>
+                <div className="font-mono text-lg text-primary">{cacheStats.trpcQueries}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground">Active</div>
+                <div className="font-mono text-sm text-primary">{cacheStats.active}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground">Stale</div>
+                <div className="font-mono text-sm text-foreground/70">{cacheStats.stale}</div>
+              </div>
+            </div>
+
+            {lastAction && (
+              <div className="text-xs text-muted-foreground mb-3">
+                <strong>Last action:</strong> {lastAction}
+              </div>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-xs mb-4">
-            <div>
-              <div className="text-muted-foreground">Total Queries</div>
-              <div className="font-mono text-lg text-foreground">{cacheStats.total}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">tRPC Queries</div>
-              <div className="font-mono text-lg text-primary">{cacheStats.trpcQueries}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">Active</div>
-              <div className="font-mono text-sm text-primary">{cacheStats.active}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">Stale</div>
-              <div className="font-mono text-sm text-foreground/70">{cacheStats.stale}</div>
-            </div>
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" size="sm" onClick={handleInvalidateSpecific}>
+              Invalidate Time
+            </Button>
+
+            <Button variant="outline" size="sm" onClick={handleInvalidateRouter}>
+              Invalidate Router
+            </Button>
+
+            <Button variant="outline" size="sm" onClick={handlePrefetchTime}>
+              Prefetch Time
+            </Button>
+
+            <Button variant="outline" size="sm" onClick={handleFilterInvalidate}>
+              Filter Invalidate
+            </Button>
           </div>
 
-          {lastAction && (
-            <div className="text-xs text-muted-foreground mb-3">
-              <strong>Last action:</strong> {lastAction}
-            </div>
-          )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleClearAll}
+            className="w-full text-destructive border-destructive/20 hover:bg-destructive/10"
+          >
+            Clear All Cache
+          </Button>
+
+          <div className="text-xs text-muted-foreground leading-relaxed">
+            <strong>Concept:</strong> Use{' '}
+            <code className="text-foreground bg-muted px-1 rounded">queryKey()</code> for specific
+            queries,
+            <code className="text-foreground bg-muted px-1 rounded">pathKey()</code> for
+            router-level operations, and{' '}
+            <code className="text-foreground bg-muted px-1 rounded">queryFilter()</code> for
+            advanced cache control with predicates.
+          </div>
         </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          <ButtonWrapper variant="outline" size="sm" onClick={handleInvalidateSpecific}>
-            Invalidate Time
-          </ButtonWrapper>
-
-          <ButtonWrapper variant="outline" size="sm" onClick={handleInvalidateRouter}>
-            Invalidate Router
-          </ButtonWrapper>
-
-          <ButtonWrapper variant="outline" size="sm" onClick={handlePrefetchTime}>
-            Prefetch Time
-          </ButtonWrapper>
-
-          <ButtonWrapper variant="outline" size="sm" onClick={handleFilterInvalidate}>
-            Filter Invalidate
-          </ButtonWrapper>
-        </div>
-
-        <ButtonWrapper
-          variant="outline"
-          size="sm"
-          onClick={handleClearAll}
-          className="w-full text-destructive border-destructive/20 hover:bg-destructive/10"
-        >
-          Clear All Cache
-        </ButtonWrapper>
-
-        <div className="text-xs text-muted-foreground leading-relaxed">
-          <strong>Concept:</strong> Use{' '}
-          <code className="text-foreground bg-muted px-1 rounded">queryKey()</code> for specific
-          queries,
-          <code className="text-foreground bg-muted px-1 rounded">pathKey()</code> for router-level
-          operations, and{' '}
-          <code className="text-foreground bg-muted px-1 rounded">queryFilter()</code> for advanced
-          cache control with predicates.
-        </div>
-      </div>
-    </CardWrapper>
+      </CardContent>
+    </Card>
   )
 }

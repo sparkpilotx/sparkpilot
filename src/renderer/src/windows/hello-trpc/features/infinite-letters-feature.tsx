@@ -1,7 +1,9 @@
 import React from 'react'
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
-import { CardWrapper, SectionHeader, StatusIndicator, ButtonWrapper } from '../ui-components'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { SectionHeader, StatusIndicator } from '../shared-components'
 import { useTour } from '../tour-system'
 
 export function InfiniteLettersFeature(): React.JSX.Element {
@@ -62,74 +64,78 @@ export function InfiniteLettersFeature(): React.JSX.Element {
   const { status, message } = getStatusInfo()
 
   return (
-    <CardWrapper variant="feature">
-      <SectionHeader
-        title="Alphabet Pagination"
-        subtitle="Infinite scroll with cursor-based pagination"
-        badge="Infinite Query"
-      />
+    <Card className="shadow-lg">
+      <CardContent className="p-6">
+        <SectionHeader
+          title="Alphabet Pagination"
+          subtitle="Infinite scroll with cursor-based pagination"
+          badge="Infinite Query"
+        />
 
-      <div className="space-y-4">
-        <div className="rounded-lg bg-muted/30 p-4 border border-muted">
-          <div className="flex items-center justify-between mb-3">
-            <StatusIndicator status={status}>{message}</StatusIndicator>
+        <div className="space-y-4">
+          <div className="rounded-lg bg-muted/30 p-4 border border-muted">
+            <div className="flex items-center justify-between mb-3">
+              <StatusIndicator status={status}>{message}</StatusIndicator>
 
-            <div className="flex gap-2">
-              <ButtonWrapper
-                variant="outline"
-                size="sm"
-                onClick={handleReset}
-                disabled={lettersQuery.isLoading}
-              >
-                Reset
-              </ButtonWrapper>
-
-              {hasNextPage && (
-                <ButtonWrapper
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
                   size="sm"
-                  onClick={handleLoadMore}
-                  isLoading={isFetchingNextPage}
-                  disabled={!hasNextPage}
+                  onClick={handleReset}
+                  disabled={lettersQuery.isLoading}
                 >
-                  Load More
-                </ButtonWrapper>
-              )}
+                  Reset
+                </Button>
+
+                {hasNextPage && (
+                  <Button
+                    size="sm"
+                    onClick={handleLoadMore}
+                    disabled={!hasNextPage || isFetchingNextPage}
+                  >
+                    {isFetchingNextPage && (
+                      <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin mr-2" />
+                    )}
+                    Load More
+                  </Button>
+                )}
+              </div>
             </div>
+
+            {allLetters.length > 0 && (
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  {allLetters.map((letter, index) => (
+                    <div
+                      key={`${letter}-${index}`}
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 font-mono font-semibold text-primary"
+                    >
+                      {letter}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-xs text-muted-foreground">
+                  {!hasNextPage && allLetters.length > 0 && (
+                    <span className="text-primary">✓ All letters loaded</span>
+                  )}
+                  {hasNextPage && <span>More letters available...</span>}
+                </div>
+              </div>
+            )}
           </div>
 
-          {allLetters.length > 0 && (
-            <div className="space-y-3">
-              <div className="flex flex-wrap gap-2">
-                {allLetters.map((letter, index) => (
-                  <div
-                    key={`${letter}-${index}`}
-                    className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 font-mono font-semibold text-primary"
-                  >
-                    {letter}
-                  </div>
-                ))}
-              </div>
-
-              <div className="text-xs text-muted-foreground">
-                {!hasNextPage && allLetters.length > 0 && (
-                  <span className="text-primary">✓ All letters loaded</span>
-                )}
-                {hasNextPage && <span>More letters available...</span>}
-              </div>
-            </div>
-          )}
+          <div className="text-xs text-muted-foreground leading-relaxed">
+            <strong>Concept:</strong> This uses{' '}
+            <code className="text-foreground bg-muted px-1 rounded">
+              trpc.helloTrpc.letters.infiniteQueryOptions()
+            </code>
+            with <code className="text-foreground bg-muted px-1 rounded">useInfiniteQuery</code> for
+            cursor-based pagination. Each page is cached independently, enabling efficient infinite
+            scroll patterns.
+          </div>
         </div>
-
-        <div className="text-xs text-muted-foreground leading-relaxed">
-          <strong>Concept:</strong> This uses{' '}
-          <code className="text-foreground bg-muted px-1 rounded">
-            trpc.helloTrpc.letters.infiniteQueryOptions()
-          </code>
-          with <code className="text-foreground bg-muted px-1 rounded">useInfiniteQuery</code> for
-          cursor-based pagination. Each page is cached independently, enabling efficient infinite
-          scroll patterns.
-        </div>
-      </div>
-    </CardWrapper>
+      </CardContent>
+    </Card>
   )
 }

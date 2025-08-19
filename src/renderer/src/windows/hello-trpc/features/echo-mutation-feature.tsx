@@ -1,13 +1,10 @@
 import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc'
-import {
-  CardWrapper,
-  SectionHeader,
-  InputWrapper,
-  ButtonWrapper,
-  StatusIndicator,
-} from '../ui-components'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { SectionHeader, StatusIndicator } from '../shared-components'
 import { useTour } from '../tour-system'
 
 export function EchoMutationFeature(): React.JSX.Element {
@@ -73,59 +70,67 @@ export function EchoMutationFeature(): React.JSX.Element {
   const { status, message } = getStatusInfo()
 
   return (
-    <CardWrapper variant="feature">
-      <SectionHeader
-        title="Echo Mutation"
-        subtitle="Server-side data transformation using tRPC's mutationOptions"
-        badge="Mutation"
-      />
+    <Card className="shadow-lg">
+      <CardContent className="p-6">
+        <SectionHeader
+          title="Echo Mutation"
+          subtitle="Server-side data transformation using tRPC's mutationOptions"
+          badge="Mutation"
+        />
 
-      <div className="space-y-4">
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <InputWrapper
-            label="Text to Echo"
-            placeholder="Type something to transform..."
-            value={text}
-            onChange={handleInputChange}
-            error={inputError}
-            disabled={echoMutation.isPending}
-          />
+        <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground/80">Text to Echo</label>
+              <Input
+                placeholder="Type something to transform..."
+                value={text}
+                onChange={handleInputChange}
+                disabled={echoMutation.isPending}
+                className={inputError ? 'border-destructive focus-visible:ring-destructive/20' : ''}
+              />
+              {inputError && <p className="text-xs text-destructive">{inputError}</p>}
+            </div>
 
-          <ButtonWrapper
-            type="submit"
-            className="w-full"
-            isLoading={echoMutation.isPending}
-            disabled={!text.trim() || !!inputError}
-          >
-            {echoMutation.isPending ? 'Echoing...' : 'Echo Text'}
-          </ButtonWrapper>
-        </form>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={!text.trim() || !!inputError || echoMutation.isPending}
+            >
+              {echoMutation.isPending && (
+                <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin mr-2" />
+              )}
+              {echoMutation.isPending ? 'Echoing...' : 'Echo Text'}
+            </Button>
+          </form>
 
-        <div className="rounded-lg bg-muted/30 p-4 border border-muted">
-          <div className="flex items-center justify-between mb-3">
-            <StatusIndicator status={status}>{message}</StatusIndicator>
+          <div className="rounded-lg bg-muted/30 p-4 border border-muted">
+            <div className="flex items-center justify-between mb-3">
+              <StatusIndicator status={status}>{message}</StatusIndicator>
+            </div>
+
+            {echoMutation.data && (
+              <div className="space-y-2">
+                <div className="text-xs text-muted-foreground">Server Response:</div>
+                <div className="font-mono text-lg text-primary font-semibold">
+                  {echoMutation.data.echoed}
+                </div>
+              </div>
+            )}
           </div>
 
-          {echoMutation.data && (
-            <div className="space-y-2">
-              <div className="text-xs text-muted-foreground">Server Response:</div>
-              <div className="font-mono text-lg text-primary font-semibold">
-                {echoMutation.data.echoed}
-              </div>
-            </div>
-          )}
+          <div className="text-xs text-muted-foreground leading-relaxed">
+            <strong>Concept:</strong> This uses{' '}
+            <code className="text-foreground bg-muted px-1 rounded">
+              trpc.helloTrpc.echo.mutationOptions()
+            </code>
+            with TanStack Query's{' '}
+            <code className="text-foreground bg-muted px-1 rounded">useMutation</code> hook.
+            Mutations handle server state changes with automatic error handling and optimistic
+            updates.
+          </div>
         </div>
-
-        <div className="text-xs text-muted-foreground leading-relaxed">
-          <strong>Concept:</strong> This uses{' '}
-          <code className="text-foreground bg-muted px-1 rounded">
-            trpc.helloTrpc.echo.mutationOptions()
-          </code>
-          with TanStack Query's{' '}
-          <code className="text-foreground bg-muted px-1 rounded">useMutation</code> hook. Mutations
-          handle server state changes with automatic error handling and optimistic updates.
-        </div>
-      </div>
-    </CardWrapper>
+      </CardContent>
+    </Card>
   )
 }
