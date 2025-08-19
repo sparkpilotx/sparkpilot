@@ -104,15 +104,11 @@ export function CacheManagementFeature(): React.JSX.Element {
             </div>
             <div>
               <div className="text-muted-foreground">Active</div>
-              <div className="font-mono text-sm text-primary">
-                {cacheStats.active}
-              </div>
+              <div className="font-mono text-sm text-primary">{cacheStats.active}</div>
             </div>
             <div>
               <div className="text-muted-foreground">Stale</div>
-              <div className="font-mono text-sm text-foreground/70">
-                {cacheStats.stale}
-              </div>
+              <div className="font-mono text-sm text-foreground/70">{cacheStats.stale}</div>
             </div>
           </div>
 
