@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
+import { QueryClientProvider } from '@tanstack/react-query'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { queryClient } from '@/lib/trpc'
 
 import './src/styles/globals.css'
 import App from './src/App'
@@ -15,8 +17,10 @@ import App from './src/App'
  */
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <TooltipProvider>
-      <App />
-    </TooltipProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 )

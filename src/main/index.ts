@@ -1,9 +1,10 @@
 import { app, BrowserWindow } from 'electron/main'
 import { shell } from 'electron/common'
-import { platform } from '@electron-toolkit/utils'
+import { platform, is } from '@electron-toolkit/utils'
 import { createAppTray, destroyAppTray } from './tray'
 import { buildWindowsTrayMenu } from './window-manager'
 import { ensureDatabaseConnection } from './prisma'
+import { startTrpcServer, stopTrpcServer } from './trpc/server'
 
 /**
  * Main process entry point for SparkPilot
@@ -74,8 +75,19 @@ app.whenReady().then(async () => {
     await ensureDatabaseConnection()
   } catch (error) {
     console.error('Database connectivity check failed:', error)
-    if (process.env.NODE_ENV === 'production') {
+    if (!is.dev) {
       // In production, abort startup if DB is required
+      app.quit()
+      return
+    }
+  }
+
+  // Start embedded tRPC server (HTTP + SSE)
+  try {
+    startTrpcServer()
+  } catch (error) {
+    console.error('Failed to start tRPC server:', error)
+    if (!is.dev) {
       app.quit()
       return
     }
@@ -97,6 +109,7 @@ app.on('window-all-closed', () => {
 // Clean up IPC handlers and stop tRPC server before quitting
 app.on('before-quit', () => {
   destroyAppTray()
+  void stopTrpcServer()
 })
 
 // Security: Prevent unauthorized navigation and redirect to external browser
@@ -128,7 +141,7 @@ app.on('web-contents-created', (_event, contents) => {
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error)
   // TODO(crash-reporting): Implement file logging or crash reporting service
-  if (process.env.NODE_ENV === 'production') {
+  if (!is.dev) {
     app.quit()
   }
 })

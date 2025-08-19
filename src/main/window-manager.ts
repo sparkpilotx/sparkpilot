@@ -7,6 +7,7 @@ import { is, optimizer } from '@electron-toolkit/utils'
 import { windowModule as settingsModule } from './windows/settings'
 import { windowModule as helloWorldModule } from './windows/hello-world'
 import { windowModule as helloStylingModule } from './windows/hello-styling'
+import { windowModule as helloTrpcModule } from './windows/hello-trpc'
 
 /**
  * Central window manager: typed registry, single-instance control, and tray menu.
@@ -17,6 +18,7 @@ const modules = new Map<WindowId, WindowModule>([
   ['settings', settingsModule],
   ['hello-world', helloWorldModule],
   ['hello-styling', helloStylingModule],
+  ['hello-trpc', helloTrpcModule],
 ])
 
 export const registerWindowModule = (id: WindowId, mod: WindowModule): void => {

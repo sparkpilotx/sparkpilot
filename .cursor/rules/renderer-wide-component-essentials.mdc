@@ -35,6 +35,7 @@ Component authoring rules (renderer)
 ## UI, styling, and accessibility
 
 - TailwindCSS v4 + shadcn/ui primitives.
+- `npx shadcn@latest add` to add components that are not installed in `src/renderer/src/components/ui`
 - Use CVA + tailwind-merge for component variants.
 - Rely on Radix primitives; ensure ARIA compliance and keyboard navigation parity.
 - Ensure `.app-region-drag`/`.app-region-no-drag` on window chrome to avoid drag conflicts.

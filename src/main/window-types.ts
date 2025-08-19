@@ -1,4 +1,4 @@
-export type WindowId = 'settings' | 'hello-world' | 'hello-styling'
+export type WindowId = 'settings' | 'hello-world' | 'hello-styling' | 'hello-trpc'
 
 export type WindowDescriptor = {
   id: WindowId
