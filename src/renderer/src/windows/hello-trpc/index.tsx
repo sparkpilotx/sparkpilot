@@ -156,9 +156,9 @@ const HelloTrpc = ({}: HelloTrpcProps): React.JSX.Element => {
       <TourProvider>
         <div className="flex h-screen flex-col bg-gradient-to-br from-background to-background/50">
           <WindowChrome
-            title="SparkPilot • tRPC Interactive Guide"
-            subTitle="End-to-end typesafe APIs"
-            shortDescription="tRPC v11"
+            title={import.meta.env.VITE_APP_NAME}
+            subTitle="tRPC Interactive Guide"
+            shortDescription="End-to-end typesafe APIs"
           />
           <MainContent />
         </div>
