@@ -4,15 +4,73 @@ alwaysApply: false
 ---
 Component authoring rules (renderer)
 
-- Prefer explicit props and return types over React.FC.
+## Component typing
+
+- Prefer explicit props and explicit return types over React.FC.
   - Do: `type Props = {}; const Component = ({}: Props): React.JSX.Element => { ... }`
   - Avoid: `const Component: React.FC<Props> = (props) => { ... }`
-  - Rationale: prevents implicit children, simplifies generics, and avoids redundant typing with TS 5 + React 19.
+  - Rationale: prevents implicit children, simplifies generics, avoids redundancy with TS 5 + React 19.
 
 - Only accept `children` when needed.
   - Do: `type Props = { children: React.ReactNode }` explicitly.
 
-- Use English-only identifiers and comments. Keep files in kebab-case.
+## State management hierarchy
 
-- Ensure `.app-region-drag`/`.app-region-no-drag` are used on window chrome to avoid drag conflicts.
+1) Local component state
+- Use `useState` for simple cases; `useReducer` for complex transitions.
+
+2) Feature-scope state
+- Prefer React Context within a feature to avoid prop drilling beyond 2 levels.
+
+3) Global app state
+- Use Zustand with slice-based architecture.
+- Prefer atomic selectors and `shallow` comparisons for object selections.
+- Middleware: compose `devtools(persist(subscribeWithSelector(immer())))` when persistence is necessary. Persist only minimal state.
+
+4) Main process integration
+- Communicate via IPC exposed by preload only; never use Node APIs directly in the renderer.
+- Validate all IPC payloads with Zod schemas at the boundary.
+- Treat main-process data as async; include loading and error states in UI.
+
+## UI, styling, and accessibility
+
+- TailwindCSS v4 + shadcn/ui primitives.
+- Use CVA + tailwind-merge for component variants.
+- Rely on Radix primitives; ensure ARIA compliance and keyboard navigation parity.
+- Ensure `.app-region-drag`/`.app-region-no-drag` on window chrome to avoid drag conflicts.
+
+## Forbidden patterns
+
+- `React.FC`
+- Browser `localStorage` for app data (team policy). Prefer IPC to main for durable storage.
+- Manual `memo`/`useMemo` without profiling evidence.
+- Class components.
+- CommonJS `require`/`module.exports` in renderer (ESM-only).
+
+## Required patterns
+
+- Functional components with hooks, explicit TypeScript types.
+- Immutable state updates and pure render functions.
+- Error boundaries for isolating rendering failures where appropriate.
+- Kebab-case filenames; English-only identifiers and comments.
+
+## File organization
+
+- Components: `src/renderer/src/components/`
+- Hooks: `src/renderer/src/hooks/`
+- Utilities: `src/renderer/src/lib/`
+- Styles: `src/renderer/src/styles/`
+
+## Example: component typing
+
+```typescript
+interface ButtonProps {
+  text: string;
+  onClick: () => void;
+}
+
+const Button = ({ text, onClick }: ButtonProps): React.JSX.Element => {
+  return <button onClick={onClick}>{text}</button>;
+};
+```
 
