@@ -73,13 +73,8 @@ class SimpleErrorBoundary extends React.Component<
 // Window chrome with native macOS styling
 function WindowChrome(): React.JSX.Element {
   return (
-    <div className="app-region-drag flex items-center justify-between gap-2 border-b border-border/50 bg-background/80 backdrop-blur-xl pl-20 pr-6 py-3 supports-[backdrop-filter]:bg-background/60">
-      <div className="text-sm font-medium text-foreground tracking-tight">
-        SparkPilot • tRPC Interactive Guide
-      </div>
-      <div className="app-region-no-drag text-xs text-muted-foreground">
-        End-to-end typesafe APIs
-      </div>
+    <div className="app-region-drag flex items-center justify-between gap-2 border-b bg-background/70 pl-20 pr-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="text-xs text-muted-foreground">SparkPilot • tRPC Interactive Guide</div>
     </div>
   )
 }
