@@ -280,7 +280,7 @@ export function TourNavigation(): React.JSX.Element {
             </Button>
 
             <div className="flex gap-1">
-              {tourState.steps.map((step, index) => (
+              {tourState.steps.map((step, _index) => (
                 <div
                   key={step.id}
                   className={`w-2 h-2 rounded-full transition-colors duration-200 ${

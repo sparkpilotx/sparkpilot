@@ -8,6 +8,8 @@ import { queryClient } from '@/lib/trpc'
 import './src/styles/globals.css'
 import App from './src/App'
 
+import { AppearanceProvider } from './src/providers/appearance'
+
 /**
  * Initialize the React application in the renderer process.
  *
@@ -19,7 +21,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <App />
+        <AppearanceProvider>
+          <App />
+        </AppearanceProvider>
       </TooltipProvider>
     </QueryClientProvider>
   </React.StrictMode>,

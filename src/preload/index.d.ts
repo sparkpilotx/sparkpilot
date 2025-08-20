@@ -44,6 +44,8 @@ declare global {
     xAPI: ElectronAPI & {
       // TODO(api): Add custom app-specific methods
       // Examples: dialog management, file operations, native OS integration
+
+      // No custom APIs exposed currently; use tRPC for app/domain data
     };
   }
 }

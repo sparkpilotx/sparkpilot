@@ -20,4 +20,10 @@ model Idea {
   updatedAt DateTime @updatedAt
 }
 
+model Preferences {
+  id          String   @id @default("singleton")
+  themeSource String   @default("system")
+  updatedAt   DateTime @updatedAt
+}
+
 

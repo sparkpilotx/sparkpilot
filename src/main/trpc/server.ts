@@ -16,6 +16,7 @@
  * @see {@link https://trpc.io/docs/server/context} for context creation patterns
  */
 import http from 'http'
+import { is } from '@electron-toolkit/utils'
 
 import { createHTTPHandler } from '@trpc/server/adapters/standalone'
 
@@ -86,6 +87,7 @@ function normalizeEndpointPath(pathname: string): string {
  * @internal
  */
 const TRPC_URL = getTrpcUrl()
+const ALLOWED_ORIGIN_PROD = TRPC_URL.origin
 const ENDPOINT_PATH = normalizeEndpointPath(TRPC_URL.pathname)
 
 /**
@@ -175,8 +177,16 @@ export function startTrpcServer(): void {
   })
 
   server = http.createServer((req, res) => {
-    // Basic CORS to support Vite dev server origins in Electron
-    res.setHeader('Access-Control-Allow-Origin', '*')
+    // CORS: permissive in development; restricted in production (file:// or configured origin)
+    const requestOrigin = (req.headers.origin as string | undefined) ?? 'null'
+    if (is.dev) {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+    } else {
+      // Allow either the configured origin (if any) or the "null" origin used by file:// pages
+      const allow = requestOrigin === 'null' || requestOrigin === ALLOWED_ORIGIN_PROD
+      res.setHeader('Access-Control-Allow-Origin', allow ? requestOrigin : 'null')
+      res.setHeader('Vary', 'Origin')
+    }
     res.setHeader('Access-Control-Allow-Headers', 'accept, content-type')
     // Allow POST to support httpBatchLink for queries/mutations; GET for SSE and simple queries
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')

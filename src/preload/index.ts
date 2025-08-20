@@ -16,6 +16,16 @@
 import { electronAPI } from '@electron-toolkit/preload'
 import { contextBridge } from 'electron'
 
+// Early appearance application to minimize FOUC
+try {
+  const prefersDark =
+    typeof window !== 'undefined' && 'matchMedia' in window
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : false
+  document.documentElement.classList.toggle('dark', Boolean(prefersDark))
+  ;(document.documentElement as HTMLElement).style.colorScheme = prefersDark ? 'dark' : 'light'
+} catch {}
+
 /**
  * Extended Electron API combining standard functionality with custom features.
  *

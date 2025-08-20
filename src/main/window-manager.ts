@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu } from 'electron/main'
+import { BrowserWindow, Menu, nativeTheme } from 'electron/main'
 import { fileURLToPath } from 'url'
 import { existsSync } from 'fs'
 import type { WindowDescriptor, WindowId, WindowModule } from './window-types'
@@ -64,6 +64,7 @@ const createBrowserWindow = (descriptor: WindowDescriptor): BrowserWindow => {
     minWidth: descriptor.minWidth,
     minHeight: descriptor.minHeight,
     show: false,
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#0f0f0f' : '#ffffff',
     autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
     webPreferences: {

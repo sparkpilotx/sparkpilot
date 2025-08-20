@@ -5,6 +5,8 @@ import { createAppTray, destroyAppTray } from './tray'
 import { buildWindowsTrayMenu } from './window-manager'
 import { ensureDatabaseConnection } from './prisma'
 import { startTrpcServer, stopTrpcServer } from './trpc/server'
+import { prisma } from './prisma'
+import { nativeTheme } from 'electron/main'
 
 /**
  * Main process entry point for SparkPilot
@@ -95,6 +97,25 @@ app.whenReady().then(async () => {
 
   // Create system tray with dynamic windows menu
   createAppTray(buildWindowsTrayMenu())
+
+  // Appearance changes are bridged via tRPC subscriptions; no IPC wiring needed
+
+  // Apply persisted themeSource before any windows are shown
+  try {
+    const client = prisma as unknown as {
+      preferences: {
+        findUnique: (args: {
+          where: { id: string }
+        }) => Promise<{ themeSource: 'system' | 'light' | 'dark' } | null>
+      }
+    }
+    const pref = await client.preferences.findUnique({ where: { id: 'singleton' } })
+    if (pref?.themeSource) {
+      nativeTheme.themeSource = pref.themeSource
+    }
+  } catch {
+    // non-fatal in dev
+  }
 
   // Do not auto-show or create window on dock activation; tray controls visibility
 })

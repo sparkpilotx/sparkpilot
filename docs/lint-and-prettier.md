@@ -43,6 +43,7 @@ This project enforces strict, type-aware linting and consistent formatting acros
   - Avoid `async` callbacks where a `void` return is expected (timers, event handlers). Use `void doAsync()` or `.catch(...)` instead.
   - Annotate component/function return types explicitly, e.g. `(): JSX.Element`.
   - Avoid `any` and, per project policy, avoid `unknown` where possible by modeling types precisely.
+  - For intentionally unused variables or parameters, prefix with `_` to satisfy `@typescript-eslint/no-unused-vars` (configured with `argsIgnorePattern`/`varsIgnorePattern: '^_'`).
 
 #### Scope
 

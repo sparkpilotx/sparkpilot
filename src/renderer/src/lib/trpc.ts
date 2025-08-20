@@ -118,6 +118,10 @@ const API_URL = import.meta.env.VITE_TRPC_HTTP_URL
  * ```
  */
 const links = [
+  // Enable request logging in development for visibility
+  ...(import.meta.env.DEV
+    ? [loggerLink({ enabled: () => true })]
+    : []),
   splitLink({
     condition: (op) => op.type === 'subscription',
     true: httpSubscriptionLink({ url: API_URL, transformer: superjson }),
